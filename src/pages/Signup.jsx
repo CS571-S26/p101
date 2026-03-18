@@ -2,27 +2,28 @@ import { useState } from 'react';
 import { Container, Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
 import './Auth.css';
 
-function Login({ onSwitch }) {
+function Signup({ onSwitch }) {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-
-    const handleLogin = (e) => {
-    if (!email || !password) {
-      alert('Please enter both email and password');
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      alert('Passwords do not match');
       return;
     }
-    alert('Hi ' + email + ', you are logged in!');
+    alert('Hi ' + name + ', your account with ' + email + ' will be created shortly!');
   };
 
-
   const handleGoogleLogin = () => {
-    alert('Google OAuth login - connect backend later');
+    console.log('Google OAuth signup - connect backend later');
   };
 
   const handleGithubLogin = () => {
-    alert('GitHub OAuth login - connect backend later');
+    console.log('GitHub OAuth signup - connect backend later');
   };
 
   return (
@@ -63,9 +64,20 @@ function Login({ onSwitch }) {
             </Button>
           </div>
 
-          <p className="auth-divider">or use your email account</p>
+          <p className="auth-divider">or create an account with email</p>
 
-          <Form className="w-100 px-3" style={{ maxWidth: '320px' }}>
+          <Form className="w-100 px-3" style={{ maxWidth: '320px' }} onSubmit={handleSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Control
+                type="text"
+                placeholder="Name"
+                className="auth-input"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </Form.Group>
+
             <Form.Group className="mb-3">
               <Form.Control
                 type="email"
@@ -97,18 +109,25 @@ function Login({ onSwitch }) {
               </InputGroup>
             </Form.Group>
 
-            <div className="text-end mb-3">
-              <a href="#" className="forgot-link">Forgot Your Password?</a>
-            </div>
+            <Form.Group className="mb-3">
+              <Form.Control
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Confirm Password"
+                className="auth-input"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+            </Form.Group>
 
-            <Button type="button" variant="outline-light" onClick={handleLogin} className="w-100 auth-submit">
-              LOGIN
+            <Button type="submit" variant="outline-light" className="w-100 auth-submit">
+              SIGN UP
             </Button>
           </Form>
 
           <p className="auth-switch mt-3">
-            Don't have an account?{' '}
-            <span className="auth-switch-link" onClick={onSwitch}>Sign Up</span>
+            Already have an account?{' '}
+            <span className="auth-switch-link" onClick={onSwitch}>Login</span>
           </p>
         </Col>
       </Row>
@@ -116,4 +135,4 @@ function Login({ onSwitch }) {
   );
 }
 
-export default Login;
+export default Signup;

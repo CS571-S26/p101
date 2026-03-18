@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import Login from './pages/Login'
+import Signup from './pages/Signup'
 import './App.css'
 
 function App() {
   const [page, setPage] = useState('login')
 
   return (
-    <div className="auth-page">
+    <>
       {page === 'login' && <Login onSwitch={() => setPage('signup')} />}
-    </div>
+      {page === 'signup' && <Signup onSwitch={() => setPage('login')} />}
+    </>
   )
 }
 
