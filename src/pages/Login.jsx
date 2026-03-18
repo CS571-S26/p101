@@ -1,19 +1,21 @@
 import { useState } from 'react';
 import { Container, Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 import './Auth.css';
 
-function Login({ onSwitch }) {
+function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
-
-    const handleLogin = (e) => {
+  const handleLogin = () => {
     if (!email || !password) {
       alert('Please enter both email and password');
       return;
     }
     alert('Hi ' + email + ', you are logged in!');
+    navigate('/home');
   };
 
 
@@ -108,7 +110,7 @@ function Login({ onSwitch }) {
 
           <p className="auth-switch mt-3">
             Don't have an account?{' '}
-            <span className="auth-switch-link" onClick={onSwitch}>Sign Up</span>
+            <Link to="/signup" className="auth-switch-link">Sign Up</Link>
           </p>
         </Col>
       </Row>

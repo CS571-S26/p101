@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { Container, Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 import './Auth.css';
 
-function Signup({ onSwitch }) {
+function Signup() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,6 +18,7 @@ function Signup({ onSwitch }) {
       return;
     }
     alert('Hi ' + name + ', your account with ' + email + ' will be created shortly!');
+    navigate('/home');
   };
 
   const handleGoogleLogin = () => {
@@ -127,7 +130,7 @@ function Signup({ onSwitch }) {
 
           <p className="auth-switch mt-3">
             Already have an account?{' '}
-            <span className="auth-switch-link" onClick={onSwitch}>Login</span>
+            <Link to="/login" className="auth-switch-link">Login</Link>
           </p>
         </Col>
       </Row>
