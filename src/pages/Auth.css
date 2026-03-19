@@ -18,6 +18,29 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* ── Slide-in Animations ── */
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 /* ── Left Panel ── */
 .auth-left {
   background: url('https://images.unsplash.com/photo-1551918120-9739cb430c6d?w=600&q=80')
@@ -27,6 +50,7 @@
   justify-content: center;
   align-items: center;
   padding: 2rem;
+  animation: slideInLeft 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
 .auth-left::before {
@@ -74,6 +98,8 @@
   background: #1b3a5c;
   color: #fff;
   overflow-y: auto;
+  animation: slideInRight 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation-delay: 0.15s;
 }
 
 .auth-brand {
@@ -83,6 +109,15 @@
   margin-bottom: 1.5rem;
   border: 2px solid #fff;
   padding: 6px 18px;
+  cursor: default;
+  transition: letter-spacing 0.3s, text-shadow 0.3s, border-color 0.3s, transform 0.3s;
+}
+
+.auth-brand:hover {
+  letter-spacing: 8px;
+  text-shadow: 0 0 12px rgba(144, 184, 248, 0.6), 0 0 30px rgba(144, 184, 248, 0.3);
+  border-color: #90b8f8;
+  transform: scale(1.05);
 }
 
 /* ── OAuth Buttons ── */
