@@ -108,7 +108,7 @@
   letter-spacing: 3px;
   margin-bottom: 1.5rem;
   border: 2px solid #fff;
-  padding: 6px 18px;
+  padding: 0.5rem 1.5rem 0.5rem;
   cursor: default;
   transition: letter-spacing 0.3s, text-shadow 0.3s, border-color 0.3s, transform 0.3s;
 }
