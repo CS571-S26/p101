@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Form, Button, Row, Col } from 'react-bootstrap';
 import Sidebar from '../components/Sidebar';
+import GroupCard from '../components/group/GroupCard';
+import GroupMemberList from '../components/group/GroupMemberList';
+import GroupChat from '../components/group/GroupChat';
+import CreateGroupModal from '../components/group/CreateGroupModal';
 import './Home.css';
 import './Groups.css';
 
@@ -41,32 +44,48 @@ const sampleGroups = [
   },
 ];
 
+const GROUP_COLORS = ['#90b8f8', '#34d399', '#f59e0b', '#f472b6', '#a78bfa'];
+
 function Groups() {
   const navigate = useNavigate();
   const [groups, setGroups] = useState(sampleGroups);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  // Create group form state
-  const [newGroupName, setNewGroupName] = useState('');
-  const [newMemberEmails, setNewMemberEmails] = useState('');
+  // Chat state
+  const [chatInput, setChatInput] = useState('');
+  const [messages, setMessages] = useState({});
 
-  const handleCreateGroup = (e) => {
+  const groupMessages = selectedGroup ? (messages[selectedGroup.id] || []) : [];
+
+  const handleSendMessage = (e) => {
     e.preventDefault();
-    const emails = newMemberEmails.split(',').map((s) => s.trim()).filter(Boolean);
+    if (!chatInput.trim() || !selectedGroup) return;
+    const msg = {
+      id: Date.now(),
+      sender: 'You',
+      text: chatInput.trim(),
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    };
+    setMessages((prev) => ({
+      ...prev,
+      [selectedGroup.id]: [...(prev[selectedGroup.id] || []), msg],
+    }));
+    setChatInput('');
+  };
+
+  const handleCreateGroup = (name, emails) => {
     const newGroup = {
       id: Date.now(),
-      name: newGroupName,
+      name,
       members: [
         { name: 'You', email: 'you@email.com', role: 'Admin' },
         ...emails.map((email) => ({ name: email.split('@')[0], email, role: 'Member' })),
       ],
       trips: 0,
-      color: ['#90b8f8', '#34d399', '#f59e0b', '#f472b6', '#a78bfa'][Math.floor(Math.random() * 5)],
+      color: GROUP_COLORS[Math.floor(Math.random() * GROUP_COLORS.length)],
     };
     setGroups([...groups, newGroup]);
-    setNewGroupName('');
-    setNewMemberEmails('');
     setShowCreateModal(false);
   };
 
@@ -115,48 +134,18 @@ function Groups() {
           </button>
         </div>
 
-        {/* Groups Grid */}
         <div className="groups-layout">
-          {/* Left: Group cards */}
+          {/* Left: Group cards list */}
           <div className="groups-list">
             {groups.map((group) => (
-              <div
+              <GroupCard
                 key={group.id}
-                className={`group-card ${selectedGroup?.id === group.id ? 'group-card-selected' : ''}`}
+                group={group}
+                isSelected={selectedGroup?.id === group.id}
                 onClick={() => setSelectedGroup(group)}
-              >
-                <div className="group-card-accent" style={{ background: group.color }} />
-                <div className="group-card-body">
-                  <div className="group-card-top">
-                    <h3 className="group-card-name">{group.name}</h3>
-                    <span className="group-card-badge">{group.members.length} members</span>
-                  </div>
-                  <div className="group-card-bottom">
-                    <div className="group-avatars">
-                      {group.members.slice(0, 4).map((m, i) => (
-                        <span key={i} className="group-avatar" style={{ background: group.color }}>
-                          {m.name.charAt(0).toUpperCase()}
-                        </span>
-                      ))}
-                      {group.members.length > 4 && (
-                        <span className="group-avatar group-avatar-more">
-                          +{group.members.length - 4}
-                        </span>
-                      )}
-                    </div>
-                    <span className="group-card-trips">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="12" cy="10" r="3" />
-                        <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z" />
-                      </svg>
-                      {group.trips} trips
-                    </span>
-                  </div>
-                </div>
-              </div>
+              />
             ))}
 
-            {/* Add group card */}
             <div className="group-card group-card-add" onClick={() => setShowCreateModal(true)}>
               <div className="group-card-add-content">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -207,107 +196,29 @@ function Groups() {
                   </button>
                 </div>
 
-                <div className="group-members-section">
-                  <h4 className="group-members-title">Members</h4>
-                  <div className="group-members-list">
-                    {selectedGroup.members.map((member, i) => (
-                      <div key={i} className="group-member-row">
-                        <span className="group-member-avatar" style={{ background: selectedGroup.color }}>
-                          {member.name.charAt(0).toUpperCase()}
-                        </span>
-                        <div className="group-member-info">
-                          <span className="group-member-name">{member.name}</span>
-                          <span className="group-member-email">{member.email}</span>
-                        </div>
-                        <span className={`group-member-role ${member.role === 'Admin' ? 'role-admin' : ''}`}>
-                          {member.role}
-                        </span>
-                        {member.role !== 'Admin' && (
-                          <button
-                            className="group-member-remove"
-                            onClick={() => handleRemoveMember(selectedGroup.id, member.email)}
-                          >
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <line x1="18" y1="6" x2="6" y2="18" />
-                              <line x1="6" y1="6" x2="18" y2="18" />
-                            </svg>
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                <div className="group-detail-split">
+                  <GroupMemberList
+                    group={selectedGroup}
+                    onRemoveMember={handleRemoveMember}
+                  />
+                  <GroupChat
+                    messages={groupMessages}
+                    chatInput={chatInput}
+                    onInputChange={setChatInput}
+                    onSend={handleSendMessage}
+                  />
                 </div>
-
-                <button
-                  className="group-plan-trip-btn"
-                  onClick={() => navigate('/trips/new')}
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="10" r="3" />
-                    <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z" />
-                  </svg>
-                  Plan a Trip with this Group
-                </button>
               </div>
             )}
           </div>
         </div>
       </main>
 
-      {/* Create Group Modal */}
       {showCreateModal && (
-        <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
-          <div className="group-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="group-modal-header">
-              <h3>Create New Group</h3>
-              <button className="group-modal-close" onClick={() => setShowCreateModal(false)}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </button>
-            </div>
-
-            <Form onSubmit={handleCreateGroup} className="group-modal-form">
-              <Form.Group className="mb-4">
-                <Form.Label className="group-modal-label">Group Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="e.g. College Friends"
-                  className="group-modal-input"
-                  value={newGroupName}
-                  onChange={(e) => setNewGroupName(e.target.value)}
-                  required
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-4">
-                <Form.Label className="group-modal-label">Invite Members (emails, comma-separated)</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  placeholder="friend1@email.com, friend2@email.com"
-                  className="group-modal-input group-modal-textarea"
-                  value={newMemberEmails}
-                  onChange={(e) => setNewMemberEmails(e.target.value)}
-                />
-              </Form.Group>
-
-              <div className="group-modal-actions">
-                <Button
-                  variant="outline-light"
-                  className="group-modal-cancel"
-                  onClick={() => setShowCreateModal(false)}
-                >
-                  Cancel
-                </Button>
-                <Button type="submit" variant="outline-light" className="group-modal-submit">
-                  Create Group
-                </Button>
-              </div>
-            </Form>
-          </div>
-        </div>
+        <CreateGroupModal
+          onClose={() => setShowCreateModal(false)}
+          onCreate={handleCreateGroup}
+        />
       )}
     </div>
   );
