@@ -13,7 +13,7 @@
 }
 
 .groups-page-subtitle {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   font-size: 0.95rem;
   margin: 0;
 }
@@ -23,10 +23,10 @@
   align-items: center;
   gap: 8px;
   padding: 10px 22px;
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border: 1.5px solid var(--input-border);
   border-radius: 30px;
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
+  background: var(--surface-bg);
+  color: var(--text-primary);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -34,9 +34,9 @@
 }
 
 .groups-create-btn:hover {
-  background: #fff;
-  color: #1b3a5c;
-  border-color: #fff;
+  background: var(--accent);
+  color: var(--accent-dark);
+  border-color: var(--accent);
 }
 
 /* ── Groups Layout (list + detail) ── */
@@ -55,8 +55,8 @@
 
 .group-detail-panel {
   flex: 1;
-  background: rgba(10, 25, 47, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-radius: 16px;
   overflow-y: auto;
   max-height: calc(100vh - 220px);
@@ -65,8 +65,8 @@
 /* ── Group Cards ── */
 .group-card {
   display: flex;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface-bg-subtle);
+  border: 1px solid var(--card-border);
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
@@ -74,14 +74,14 @@
 }
 
 .group-card:hover {
-  border-color: rgba(144, 184, 248, 0.3);
-  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--accent-bg);
+  background: var(--surface-bg-hover);
   transform: translateY(-2px);
 }
 
 .group-card-selected {
-  border-color: #90b8f8 !important;
-  background: rgba(144, 184, 248, 0.08) !important;
+  border-color: var(--accent) !important;
+  background: var(--accent-bg-subtle) !important;
 }
 
 .group-card-accent {
@@ -110,8 +110,8 @@
 .group-card-badge {
   font-size: 0.72rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
-  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  background: var(--surface-bg);
   padding: 3px 10px;
   border-radius: 12px;
 }
@@ -136,9 +136,9 @@
   justify-content: center;
   font-size: 0.7rem;
   font-weight: 700;
-  color: #0a192f;
+  color: var(--accent-dark);
   margin-left: -6px;
-  border: 2px solid rgba(10, 25, 47, 0.8);
+  border: 2px solid var(--card-bg);
 }
 
 .group-avatar:first-child {
@@ -146,8 +146,8 @@
 }
 
 .group-avatar-more {
-  background: rgba(255, 255, 255, 0.15) !important;
-  color: rgba(255, 255, 255, 0.7) !important;
+  background: var(--surface-bg-hover) !important;
+  color: var(--text-secondary) !important;
   font-size: 0.65rem;
 }
 
@@ -156,19 +156,19 @@
   align-items: center;
   gap: 4px;
   font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--text-faint);
 }
 
 /* ── Add Group Card ── */
 .group-card-add {
-  border: 2px dashed rgba(255, 255, 255, 0.12);
+  border: 2px dashed var(--border-dashed);
   background: transparent;
   justify-content: center;
 }
 
 .group-card-add:hover {
-  border-color: #90b8f8;
-  background: rgba(144, 184, 248, 0.04);
+  border-color: var(--accent);
+  background: var(--accent-bg-subtle);
 }
 
 .group-card-add-content {
@@ -177,13 +177,13 @@
   align-items: center;
   padding: 1.25rem;
   gap: 8px;
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--text-faint);
   font-size: 0.85rem;
   font-weight: 500;
 }
 
 .group-card-add:hover .group-card-add-content {
-  color: #90b8f8;
+  color: var(--accent);
 }
 
 /* ── Detail Panel Empty ── */
@@ -196,7 +196,7 @@
   min-height: 400px;
   text-align: center;
   padding: 2rem;
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--text-faint);
 }
 
 .group-detail-empty svg {
@@ -207,7 +207,7 @@
 .group-detail-empty h3 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   margin-bottom: 0.5rem;
 }
 
@@ -228,7 +228,7 @@
   align-items: flex-start;
   margin-bottom: 2rem;
   padding-bottom: 1.25rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--card-border);
 }
 
 .group-detail-title-row {
@@ -246,7 +246,7 @@
   justify-content: center;
   font-size: 1.3rem;
   font-weight: 700;
-  color: #0a192f;
+  color: var(--accent-dark);
   flex-shrink: 0;
 }
 
@@ -258,30 +258,30 @@
 
 .group-detail-meta {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   margin: 0.2rem 0 0;
 }
 
 .group-delete-btn {
   padding: 8px;
-  border: 1px solid rgba(255, 100, 100, 0.2);
+  border: 1px solid var(--danger-border);
   border-radius: 8px;
-  background: rgba(255, 100, 100, 0.06);
-  color: #ff6b6b;
+  background: var(--danger-bg);
+  color: var(--danger);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .group-delete-btn:hover {
-  background: rgba(255, 100, 100, 0.15);
-  border-color: #ff6b6b;
+  background: var(--danger-bg);
+  border-color: var(--danger);
 }
 
 /* ── Members Section ── */
 .group-members-title {
   font-size: 0.85rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 1rem;
@@ -303,7 +303,7 @@
 }
 
 .group-member-row:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface-bg-subtle);
 }
 
 .group-member-avatar {
@@ -315,7 +315,7 @@
   justify-content: center;
   font-size: 0.85rem;
   font-weight: 700;
-  color: #0a192f;
+  color: var(--accent-dark);
   flex-shrink: 0;
 }
 
@@ -332,7 +332,7 @@
 
 .group-member-email {
   font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-faint);
 }
 
 .group-member-role {
@@ -340,28 +340,28 @@
   font-weight: 600;
   padding: 3px 10px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.45);
+  background: var(--surface-bg);
+  color: var(--text-faint);
 }
 
 .role-admin {
-  background: rgba(144, 184, 248, 0.15);
-  color: #90b8f8;
+  background: var(--accent-bg);
+  color: var(--accent);
 }
 
 .group-member-remove {
   padding: 4px;
   border: none;
   background: transparent;
-  color: rgba(255, 255, 255, 0.25);
+  color: var(--text-faint);
   cursor: pointer;
   border-radius: 6px;
   transition: all 0.15s;
 }
 
 .group-member-remove:hover {
-  color: #ff6b6b;
-  background: rgba(255, 100, 100, 0.1);
+  color: var(--danger);
+  background: var(--danger-bg);
 }
 
 /* ── Plan Trip Button ── */
@@ -374,8 +374,8 @@
   margin-top: 2rem;
   padding: 12px;
   border: none;
-  background: #90b8f8;
-  color: #0a192f;
+  background: var(--accent);
+  color: var(--accent-dark);
   border-radius: 10px;
   font-size: 0.9rem;
   font-weight: 700;
@@ -384,14 +384,14 @@
 }
 
 .group-plan-trip-btn:hover {
-  background: #aeccff;
+  background: var(--accent-hover);
   transform: translateY(-1px);
 }
 
 /* ── Create Group Modal ── */
 .group-modal {
-  background: linear-gradient(135deg, #1b3a5c 0%, #243f5e 100%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--modal-bg);
+  border: 1px solid var(--card-border);
   border-radius: 16px;
   width: 100%;
   max-width: 480px;
@@ -404,7 +404,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--card-border);
 }
 
 .group-modal-header h3 {
@@ -416,7 +416,7 @@
 .group-modal-close {
   border: none;
   background: transparent;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   cursor: pointer;
   padding: 4px;
   border-radius: 6px;
@@ -424,8 +424,8 @@
 }
 
 .group-modal-close:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  background: var(--surface-bg-hover);
 }
 
 .group-modal-form {
@@ -435,29 +435,29 @@
 .group-modal-label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--text-secondary);
   margin-bottom: 0.4rem;
   letter-spacing: 0.3px;
 }
 
 .group-modal-input {
-  background: rgba(255, 255, 255, 0.07) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  background: var(--input-bg) !important;
+  border: 1.5px solid var(--input-border) !important;
   border-radius: 10px !important;
-  color: #fff !important;
+  color: var(--text-primary) !important;
   padding: 10px 14px !important;
   font-size: 0.95rem;
   transition: border-color 0.2s;
 }
 
 .group-modal-input::placeholder {
-  color: rgba(255, 255, 255, 0.4) !important;
+  color: var(--text-faint) !important;
 }
 
 .group-modal-input:focus {
-  border-color: #90b8f8 !important;
-  box-shadow: 0 0 0 2px rgba(144, 184, 248, 0.15) !important;
-  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: var(--input-focus-border) !important;
+  box-shadow: 0 0 0 2px var(--accent-bg) !important;
+  background: var(--surface-bg-hover) !important;
 }
 
 .group-modal-textarea {
@@ -491,8 +491,8 @@
 }
 
 .group-modal-submit:hover {
-  background: #fff !important;
-  color: #1b3a5c !important;
+  background: var(--accent) !important;
+  color: var(--accent-dark) !important;
 }
 
 /* ── Detail Split Layout ── */
@@ -505,7 +505,7 @@
 .group-detail-left {
   flex: 0 0 40%;
   padding-right: 1.25rem;
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: 1px solid var(--card-border);
   display: flex;
   flex-direction: column;
 }
@@ -529,12 +529,12 @@
   gap: 8px;
   font-size: 0.85rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 1rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--card-border);
 }
 
 /* ── Chat Messages ── */
@@ -557,7 +557,7 @@
   justify-content: center;
   height: 100%;
   text-align: center;
-  color: rgba(255, 255, 255, 0.25);
+  color: var(--text-faint);
   gap: 8px;
 }
 
@@ -574,8 +574,8 @@
 
 /* ── Chat Bubbles ── */
 .chat-bubble {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--surface-bg);
+  border: 1px solid var(--card-border);
   border-radius: 12px 12px 12px 4px;
   padding: 10px 14px;
   max-width: 85%;
@@ -583,8 +583,8 @@
 }
 
 .chat-bubble-self {
-  background: rgba(144, 184, 248, 0.12);
-  border-color: rgba(144, 184, 248, 0.15);
+  background: var(--accent-bg-subtle);
+  border-color: var(--accent-bg);
   border-radius: 12px 12px 4px 12px;
   align-self: flex-end;
 }
@@ -600,21 +600,21 @@
 .chat-bubble-sender {
   font-size: 0.75rem;
   font-weight: 700;
-  color: #90b8f8;
+  color: var(--accent);
 }
 
 .chat-bubble-self .chat-bubble-sender {
-  color: #aeccff;
+  color: var(--accent-hover);
 }
 
 .chat-bubble-time {
   font-size: 0.68rem;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--text-faint);
 }
 
 .chat-bubble-text {
   font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   margin: 0;
   line-height: 1.45;
   word-wrap: break-word;
@@ -629,10 +629,10 @@
 
 .group-chat-input {
   flex: 1;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  background: var(--input-bg);
+  border: 1.5px solid var(--input-border);
   border-radius: 24px;
-  color: #fff;
+  color: var(--text-primary);
   padding: 10px 16px;
   font-size: 0.88rem;
   outline: none;
@@ -640,20 +640,20 @@
 }
 
 .group-chat-input::placeholder {
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--text-faint);
 }
 
 .group-chat-input:focus {
-  border-color: #90b8f8;
-  box-shadow: 0 0 0 2px rgba(144, 184, 248, 0.1);
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 2px var(--accent-bg);
 }
 
 .group-chat-send {
   width: 40px;
   height: 40px;
   border: none;
-  background: #90b8f8;
-  color: #0a192f;
+  background: var(--accent);
+  color: var(--accent-dark);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -664,7 +664,7 @@
 }
 
 .group-chat-send:hover {
-  background: #aeccff;
+  background: var(--accent-hover);
   transform: scale(1.05);
 }
 
@@ -699,7 +699,7 @@
     flex: none;
     padding-right: 0;
     border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--card-border);
     padding-bottom: 1.25rem;
     margin-bottom: 1.25rem;
   }

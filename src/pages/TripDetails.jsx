@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
+import { ArrowLeft, Star, MapPin, Info, MessageSquare, Clock, Flag, Check } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
 import './Home.css';
 import './NewTrip.css';
@@ -266,18 +267,13 @@ function TripDetails() {
                   className="newtrip-back-btn"
                   onClick={() => navigate('/trips/new', { state: tripInfo })}
                 >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '8px' }}>
-                    <line x1="19" y1="12" x2="5" y2="12" />
-                    <polyline points="12 19 5 12 12 5" />
-                  </svg>
+                  <ArrowLeft size={18} style={{ marginRight: '8px' }} />
                   Back
                 </Button>
                 <Button type="submit" variant="outline-light" className="newtrip-submit" disabled={loading}>
                   {loading ? 'Generating...' : 'Generate Itinerary'}
                   {!loading && (
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginLeft: '8px' }}>
-                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                    </svg>
+                    <Star size={18} style={{ marginLeft: '8px' }} />
                   )}
                 </Button>
               </div>
@@ -288,10 +284,7 @@ function TripDetails() {
           <div className="step2-result-panel">
             {!generatedData && !loading && (
               <div className="result-placeholder">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
-                  <circle cx="12" cy="10" r="3" />
-                  <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z" />
-                </svg>
+                <MapPin size={48} strokeWidth={1.2} />
                 <h3>Your Itinerary Roadmap</h3>
                 <p>Fill in the details and click &ldquo;Generate Itinerary&rdquo; to see your AI-planned trip appear here.</p>
               </div>
@@ -325,15 +318,15 @@ function TripDetails() {
                 {generatedData.country_info && (
                   <div className="roadmap-info-bar">
                     <span className="info-tag">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                      <Info size={14} />
                       {generatedData.country_info.currency}
                     </span>
                     <span className="info-tag">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                      <MessageSquare size={14} />
                       {generatedData.country_info.language}
                     </span>
                     <span className="info-tag">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                      <Clock size={14} />
                       {generatedData.country_info.timezone}
                     </span>
                   </div>
@@ -354,10 +347,7 @@ function TripDetails() {
                         <p className="roadmap-card-details">{item.details}</p>
                         {item.location && (
                           <span className="roadmap-location">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <circle cx="12" cy="10" r="3" />
-                              <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z" />
-                            </svg>
+                            <MapPin size={12} />
                             {item.location}
                           </span>
                         )}
@@ -368,10 +358,7 @@ function TripDetails() {
                   <div className="roadmap-stop roadmap-finish">
                     <div className="roadmap-marker">
                       <span className="roadmap-flag">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
-                          <line x1="4" y1="22" x2="4" y2="15" />
-                        </svg>
+                        <Flag size={18} />
                       </span>
                     </div>
                     <div className="roadmap-card roadmap-card-finish">
@@ -383,9 +370,7 @@ function TripDetails() {
 
                 <button className="roadmap-save-btn" onClick={() => { alert('Trip saved!'); navigate('/home'); }}>
                   Save Trip & Go Home
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginLeft: '8px' }}>
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
+                  <Check size={18} style={{ marginLeft: '8px' }} />
                 </button>
               </div>
             )}

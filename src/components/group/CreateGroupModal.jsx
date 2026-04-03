@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import { X } from 'lucide-react';
 
 function CreateGroupModal({ onClose, onCreate }) {
   const [groupName, setGroupName] = useState('');
@@ -19,10 +20,7 @@ function CreateGroupModal({ onClose, onCreate }) {
         <div className="group-modal-header">
           <h3>Create New Group</h3>
           <button className="group-modal-close" onClick={onClose}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
+            <X size={20} />
           </button>
         </div>
 
