@@ -1,11 +1,12 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   ChevronLeft, ChevronRight, CalendarDays, LayoutGrid,
   MapPin, Clock, X, Navigation, StickyNote, Tag,
   Home, Plane, Utensils, Camera, Car, Users, Scissors,
-  Flag, CheckSquare, Heart, Copy, Trash2, Save,
+  Flag, CheckSquare, Copy, Trash2, Save,
   Bold, Italic, Underline, List, ListOrdered, ListChecks,
-  ArrowRight, Globe,
+  ArrowRight, Globe, MessageCircle, Send, Sparkles, Plus,
+  Pencil,
 } from 'lucide-react';
 import './ItineraryCalendar.css';
 
@@ -141,22 +142,202 @@ function computeDateTime(dateStr, timeStr, durationH) {
   return { startDT: fmtDT(h, m), endDT: fmtDT(endH, endM) };
 }
 
-function EventDetailPanel({ event, onClose, currentDate }) {
-  if (!event) return null;
+const CHAT_SUGGESTIONS = [
+  { icon: Utensils, text: 'Best restaurants nearby', category: 'food' },
+  { icon: Plane, text: 'Find flights to this destination', category: 'flight' },
+  { icon: Camera, text: 'Top attractions to visit', category: 'sightseeing' },
+  { icon: Home, text: 'Recommend places to stay', category: 'stay' },
+];
 
-  const [eventType, setEventType] = useState(
-    EVENT_TYPES.find((t) => t.id === (event.category || 'event').toLowerCase())?.id || 'event'
+const MOCK_RESPONSES = {
+  food: [
+    { name: 'Karim\'s', desc: 'Legendary Mughlai cuisine since 1913. Famous for seekh kebabs and mutton burra.', time: '7:00 PM - 9:00 PM', location: 'Jama Masjid Area' },
+    { name: 'Indian Accent', desc: 'Award-winning modern Indian fine dining. Innovative tasting menus.', time: '8:00 PM - 10:00 PM', location: 'The Lodhi Hotel' },
+    { name: 'Paranthe Wali Gali', desc: 'Historic street famous for stuffed paranthas since the 1870s.', time: '9:00 AM - 12:00 PM', location: 'Chandni Chowk' },
+  ],
+  flight: [
+    { name: 'Air India AI-302', desc: 'Direct flight. Economy from $450, Business from $1,200.', time: 'Departs 6:30 AM', location: 'JFK → DEL' },
+    { name: 'Emirates EK-510', desc: 'Via Dubai. Premium economy from $680. Excellent service.', time: 'Departs 10:15 PM', location: 'JFK → DXB → DEL' },
+  ],
+  sightseeing: [
+    { name: 'Red Fort', desc: 'UNESCO World Heritage Site. Iconic Mughal architecture and light show in evenings.', time: '9:30 AM - 12:00 PM', location: 'Old Delhi' },
+    { name: 'Humayun\'s Tomb', desc: 'Precursor to the Taj Mahal. Stunning Mughal gardens at sunset.', time: '3:00 PM - 5:30 PM', location: 'Nizamuddin' },
+    { name: 'Qutub Minar', desc: 'Tallest brick minaret in the world. Also see the Iron Pillar.', time: '10:00 AM - 12:30 PM', location: 'Mehrauli' },
+  ],
+  stay: [
+    { name: 'The Lodhi', desc: '5-star luxury with private plunge pools. Excellent spa and fine dining.', time: 'Check-in 2 PM', location: 'Lodhi Road' },
+    { name: 'Zostel Delhi', desc: 'Modern hostel in South Delhi. Great for solo travelers. From $15/night.', time: 'Check-in 1 PM', location: 'Hauz Khas' },
+  ],
+};
+
+function ChatBotTab({ destination }) {
+  const [messages, setMessages] = useState([
+    { role: 'assistant', text: `Hi! I'm your Voyago travel assistant. I can help you find restaurants, flights, attractions, and stays for your trip to **${destination || 'your destination'}**. What are you looking for?` },
+  ]);
+  const [input, setInput] = useState('');
+  const [typing, setTyping] = useState(false);
+  const chatEndRef = useRef(null);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, typing]);
+
+  const detectCategory = (text) => {
+    const lower = text.toLowerCase();
+    if (/eat|food|restaurant|dinner|lunch|breakfast|cuisine/i.test(lower)) return 'food';
+    if (/flight|fly|airline|airport/i.test(lower)) return 'flight';
+    if (/see|visit|attraction|sightse|monument|temple|museum|tour/i.test(lower)) return 'sightseeing';
+    if (/stay|hotel|hostel|accomm|lodge|airbnb/i.test(lower)) return 'stay';
+    return null;
+  };
+
+  const sendMessage = (text) => {
+    if (!text.trim()) return;
+    setMessages((prev) => [...prev, { role: 'user', text: text.trim() }]);
+    setInput('');
+    setTyping(true);
+
+    setTimeout(() => {
+      const cat = detectCategory(text);
+      const results = cat ? MOCK_RESPONSES[cat] : null;
+
+      if (results) {
+        setMessages((prev) => [...prev, {
+          role: 'assistant',
+          text: `Here are my top recommendations:`,
+          suggestions: results,
+          category: cat,
+        }]);
+      } else {
+        setMessages((prev) => [...prev, {
+          role: 'assistant',
+          text: `I can help you find **restaurants**, **flights**, **attractions**, or **places to stay**. Try asking something like "Best places to eat near Old Delhi" or "Find flights from New York".`,
+        }]);
+      }
+      setTyping(false);
+    }, 1200);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    sendMessage(input);
+  };
+
+  const renderMarkdown = (text) =>
+    text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+  return (
+    <div className="chatbot-container">
+      <div className="chatbot-messages">
+        {messages.map((msg, i) => (
+          <div key={i} className={`chatbot-msg ${msg.role}`}>
+            {msg.role === 'assistant' && (
+              <div className="chatbot-avatar-wrap">
+                <span className="chatbot-avatar"><Sparkles size={14} /></span>
+              </div>
+            )}
+            <div className="chatbot-bubble-wrap">
+              <div className={`chatbot-bubble chatbot-bubble-${msg.role}`}>
+                <p dangerouslySetInnerHTML={{ __html: renderMarkdown(msg.text) }} />
+                {msg.suggestions && (
+                  <div className="chatbot-suggestions-list">
+                    {msg.suggestions.map((s, j) => (
+                      <div key={j} className="chatbot-suggestion-card">
+                        <div className="chatbot-suggestion-header">
+                          <strong>{s.name}</strong>
+                          <button className="chatbot-add-btn" title="Add to itinerary">
+                            <Plus size={14} />
+                          </button>
+                        </div>
+                        <p className="chatbot-suggestion-desc">{s.desc}</p>
+                        <div className="chatbot-suggestion-meta">
+                          <span><Clock size={12} /> {s.time}</span>
+                          <span><MapPin size={12} /> {s.location}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+        {typing && (
+          <div className="chatbot-msg assistant">
+            <div className="chatbot-avatar-wrap">
+              <span className="chatbot-avatar"><Sparkles size={14} /></span>
+            </div>
+            <div className="chatbot-bubble-wrap">
+              <div className="chatbot-bubble chatbot-bubble-assistant">
+                <div className="chatbot-typing">
+                  <span /><span /><span />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        <div ref={chatEndRef} />
+      </div>
+
+      <div className="chatbot-quick-actions">
+        {CHAT_SUGGESTIONS.map((s, i) => {
+          const Icon = s.icon;
+          return (
+            <button key={i} className="chatbot-quick-btn" onClick={() => sendMessage(s.text)}>
+              <Icon size={14} /> {s.text}
+            </button>
+          );
+        })}
+      </div>
+
+      <form className="chatbot-input-bar" onSubmit={handleSubmit}>
+        <input
+          className="chatbot-input"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Ask about restaurants, flights, attractions..."
+        />
+        <button className="chatbot-send-btn" type="submit" disabled={!input.trim()}>
+          <Send size={16} />
+        </button>
+      </form>
+    </div>
   );
-  const [title, setTitle] = useState(event.title);
+}
+
+function EventDetailPanel({ event, onClose, currentDate, destination }) {
+  const [closing, setClosing] = useState(false);
+  const [modalTab, setModalTab] = useState('edit');
+  const [eventType, setEventType] = useState('event');
+  const [title, setTitle] = useState('');
   const [members, setMembers] = useState([...SAMPLE_MEMBERS]);
   const [allDay, setAllDay] = useState(false);
-  const [isOptional, setIsOptional] = useState(false);
-  const [location, setLocation] = useState(event.location || '');
-  const [description, setDescription] = useState(event.notes || '');
+  const [location, setLocation] = useState('');
+  const [description, setDescription] = useState('');
   const [timezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone.replace(/\//g, '/'));
   const descRef = useRef(null);
+  const prevEventRef = useRef(null);
 
-  const { startDT, endDT } = computeDateTime(currentDate, event.time, event.duration);
+  if (event && event !== prevEventRef.current) {
+    prevEventRef.current = event;
+    const typeId = EVENT_TYPES.find((t) => t.id === (event.category || 'event').toLowerCase())?.id || 'event';
+    if (eventType !== typeId) setEventType(typeId);
+    if (title !== event.title) setTitle(event.title);
+    if (location !== (event.location || '')) setLocation(event.location || '');
+    if (description !== (event.notes || '')) setDescription(event.notes || '');
+  }
+
+  const handleClose = () => {
+    setClosing(true);
+    setTimeout(() => {
+      setClosing(false);
+      onClose();
+    }, 300);
+  };
+
+  if (!event && !closing) return null;
+
+  const { startDT, endDT } = computeDateTime(currentDate, event?.time || '08:00', event?.duration || 1);
   const activeType = EVENT_TYPES.find((t) => t.id === eventType) || EVENT_TYPES[0];
 
   const removeMember = (idx) => setMembers((m) => m.filter((_, i) => i !== idx));
@@ -167,217 +348,207 @@ function EventDetailPanel({ event, onClose, currentDate }) {
   };
 
   return (
-    <div className="cal-detail-backdrop" onClick={onClose}>
-      <div className="cal-modal" onClick={(e) => e.stopPropagation()}>
-        {/* Modal Header */}
-        <div className="cal-modal-header">
-          <div className="cal-modal-header-left">
-            <span className="cal-modal-header-icon" style={{ background: activeType.color }}>
-              <activeType.icon size={18} color="#fff" />
-            </span>
-            <div>
-              <h3 className="cal-modal-title-text">Edit Event</h3>
-              <span className="cal-modal-subtitle">{activeType.label}</span>
-            </div>
-          </div>
-          <button className="cal-modal-close" onClick={onClose}>
+    <div className={`cal-detail-backdrop ${closing ? 'closing' : ''}`} onClick={handleClose}>
+      <div className={`cal-drawer ${closing ? 'closing' : ''}`} onClick={(e) => e.stopPropagation()}>
+        {/* Top Tab Bar */}
+        <div className="cal-modal-tabs">
+          <button
+            className={`cal-modal-tab ${modalTab === 'edit' ? 'active' : ''}`}
+            onClick={() => setModalTab('edit')}
+          >
+            <Pencil size={16} />
+            Edit Event
+          </button>
+          <button
+            className={`cal-modal-tab ${modalTab === 'chat' ? 'active' : ''}`}
+            onClick={() => setModalTab('chat')}
+          >
+            <MessageCircle size={16} />
+            ChatBot
+            <span className="cal-modal-tab-badge"><Sparkles size={10} /></span>
+          </button>
+          <div className="cal-modal-tabs-spacer" />
+          <button className="cal-modal-close" onClick={handleClose}>
             <X size={18} />
           </button>
         </div>
 
-        {/* Event Type Tabs */}
-        <div className="cal-modal-types">
-          <span className="cal-modal-type-label">Event</span>
-          <div className="cal-modal-type-icons">
-            {EVENT_TYPES.map((t) => {
-              const Icon = t.icon;
-              return (
-                <button
-                  key={t.id}
-                  className={`cal-modal-type-btn ${eventType === t.id ? 'active' : ''}`}
-                  style={eventType === t.id ? { background: t.color, color: '#fff' } : {}}
-                  onClick={() => setEventType(t.id)}
-                  title={t.label}
-                >
-                  <Icon size={16} />
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="cal-modal-body">
-          {/* Title */}
-          <div className="cal-modal-section">
-            <div className="cal-modal-title-row">
-              <span className="cal-modal-emoji" style={{ background: activeType.color + '18', color: activeType.color }}>
-                <activeType.icon size={20} />
-              </span>
-              <input
-                className="cal-modal-title-input"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Event name"
-              />
-            </div>
-
-            {/* Who's going */}
-            <div className="cal-modal-who">
-              <span className="cal-modal-who-label">WHO'S GOING?</span>
-              <div className="cal-modal-who-list">
-                {members.map((m, i) => (
-                  <div key={i} className="cal-modal-who-avatar" style={{ background: m.color }}>
-                    {m.initials}
-                    <button className="cal-modal-who-remove" onClick={() => removeMember(i)}>
-                      <X size={10} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* When */}
-          <div className="cal-modal-section">
-            <h4 className="cal-modal-section-title">
-              <CalendarDays size={16} className="cal-modal-section-icon" style={{ color: '#f97316' }} />
-              When
-            </h4>
-            <div className="cal-modal-when-row">
-              <div className="cal-modal-when-field">
-                <input className="cal-modal-input" value={startDT} readOnly />
-              </div>
-              <div className="cal-modal-when-field">
-                <select className="cal-modal-select" value={timezone} readOnly>
-                  <option>{timezone}</option>
-                </select>
-              </div>
-              <span className="cal-modal-when-arrow"><ArrowRight size={16} /></span>
-              <div className="cal-modal-when-field">
-                <input className="cal-modal-input" value={endDT} readOnly />
-              </div>
-              <div className="cal-modal-when-field">
-                <select className="cal-modal-select" value={timezone} readOnly>
-                  <option>{timezone}</option>
-                </select>
-              </div>
-            </div>
-            <label className="cal-modal-toggle-row">
-              <button
-                className={`cal-modal-toggle ${allDay ? 'on' : ''}`}
-                onClick={() => setAllDay(!allDay)}
-                role="switch"
-                aria-checked={allDay}
-              >
-                <span className="cal-modal-toggle-thumb" />
-              </button>
-              All day event
-            </label>
-          </div>
-
-          {/* Location */}
-          <div className="cal-modal-section">
-            <h4 className="cal-modal-section-title">
-              <MapPin size={16} className="cal-modal-section-icon" style={{ color: '#22c55e' }} />
-              Location
-            </h4>
-            <div className="cal-modal-location-wrap">
-              <MapPin size={16} className="cal-modal-location-icon" />
-              <input
-                className="cal-modal-input cal-modal-location-input"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                placeholder="Search for a place"
-              />
-              {location && (
-                <a
-                  className="cal-modal-map-link"
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title="View on Map"
-                >
-                  <Globe size={16} />
-                </a>
-              )}
-            </div>
-          </div>
-
-          {/* Optional Event */}
-          <div className="cal-modal-section cal-modal-optional-section">
-            <div className="cal-modal-optional-left">
-              <label className="cal-modal-toggle-row">
-                <button
-                  className={`cal-modal-toggle ${isOptional ? 'on' : ''}`}
-                  onClick={() => setIsOptional(!isOptional)}
-                  role="switch"
-                  aria-checked={isOptional}
-                >
-                  <span className="cal-modal-toggle-thumb" />
-                </button>
+        {modalTab === 'edit' ? (
+          <>
+            {/* Edit Event Header */}
+            <div className="cal-modal-header">
+              <div className="cal-modal-header-left">
+                <span className="cal-modal-header-icon" style={{ background: activeType.color }}>
+                  <activeType.icon size={18} color="#fff" />
+                </span>
                 <div>
-                  <span className="cal-modal-optional-title">Optional Event</span>
-                  <span className="cal-modal-optional-desc">Let your travel companions vote on this activity</span>
+                  <h3 className="cal-modal-title-text">Edit Event</h3>
+                  <span className="cal-modal-subtitle">{activeType.label}</span>
                 </div>
-              </label>
-            </div>
-            <button className="cal-modal-vote-btn">
-              <Heart size={14} />
-              Vote
-            </button>
-          </div>
-
-          {/* Description */}
-          <div className="cal-modal-section">
-            <h4 className="cal-modal-section-title">
-              <StickyNote size={16} className="cal-modal-section-icon" style={{ color: '#f59e0b' }} />
-              Description
-            </h4>
-            <div className="cal-modal-editor">
-              <div className="cal-modal-editor-toolbar">
-                <button className="cal-modal-editor-btn" onClick={() => execFormat('bold')} title="Bold"><Bold size={16} /></button>
-                <button className="cal-modal-editor-btn" onClick={() => execFormat('italic')} title="Italic"><Italic size={16} /></button>
-                <button className="cal-modal-editor-btn" onClick={() => execFormat('underline')} title="Underline"><Underline size={16} /></button>
-                <span className="cal-modal-editor-sep" />
-                <button className="cal-modal-editor-btn" onClick={() => execFormat('insertUnorderedList')} title="Bullet List"><List size={16} /></button>
-                <button className="cal-modal-editor-btn" onClick={() => execFormat('insertOrderedList')} title="Numbered List"><ListOrdered size={16} /></button>
-                <button className="cal-modal-editor-btn" title="Checklist"><ListChecks size={16} /></button>
               </div>
-              <div
-                ref={descRef}
-                className="cal-modal-editor-area"
-                contentEditable
-                suppressContentEditableWarning
-                dangerouslySetInnerHTML={{ __html: description }}
-                onBlur={(e) => setDescription(e.currentTarget.innerHTML)}
-                data-placeholder="Add notes, details, or instructions..."
-              />
             </div>
-          </div>
-        </div>
 
-        {/* Footer */}
-        <div className="cal-modal-footer">
-          <div className="cal-modal-footer-left">
-            <button className="cal-modal-footer-btn cal-modal-delete-btn">
-              <Trash2 size={15} />
-              Delete
-            </button>
-            <button className="cal-modal-footer-btn cal-modal-dup-btn">
-              <Copy size={15} />
-              Duplicate
-            </button>
-          </div>
-          <div className="cal-modal-footer-right">
-            <button className="cal-modal-footer-btn cal-modal-cancel-btn" onClick={onClose}>
-              Cancel
-            </button>
-            <button className="cal-modal-footer-btn cal-modal-save-btn" onClick={onClose}>
-              <Save size={15} />
-              Save Event
-            </button>
-          </div>
-        </div>
+            {/* Event Type Tabs */}
+            <div className="cal-modal-types">
+              <span className="cal-modal-type-label">Event</span>
+              <div className="cal-modal-type-icons">
+                {EVENT_TYPES.map((t) => {
+                  const Icon = t.icon;
+                  return (
+                    <button
+                      key={t.id}
+                      className={`cal-modal-type-btn ${eventType === t.id ? 'active' : ''}`}
+                      style={eventType === t.id ? { background: t.color, color: '#fff' } : {}}
+                      onClick={() => setEventType(t.id)}
+                      title={t.label}
+                    >
+                      <Icon size={16} />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="cal-modal-body">
+              <div className="cal-modal-section">
+                <div className="cal-modal-title-row">
+                  <span className="cal-modal-emoji" style={{ background: activeType.color + '18', color: activeType.color }}>
+                    <activeType.icon size={20} />
+                  </span>
+                  <input
+                    className="cal-modal-title-input"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Event name"
+                  />
+                </div>
+                <div className="cal-modal-who">
+                  <span className="cal-modal-who-label">WHO'S GOING?</span>
+                  <div className="cal-modal-who-list">
+                    {members.map((m, i) => (
+                      <div key={i} className="cal-modal-who-avatar" style={{ background: m.color }}>
+                        {m.initials}
+                        <button className="cal-modal-who-remove" onClick={() => removeMember(i)}>
+                          <X size={10} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="cal-modal-section">
+                <h4 className="cal-modal-section-title">
+                  <CalendarDays size={16} className="cal-modal-section-icon" style={{ color: '#f97316' }} />
+                  When
+                </h4>
+                <div className="cal-modal-when-row">
+                  <div className="cal-modal-when-field">
+                    <input className="cal-modal-input" value={startDT} readOnly />
+                  </div>
+                  <div className="cal-modal-when-field">
+                    <select className="cal-modal-select" value={timezone} readOnly>
+                      <option>{timezone}</option>
+                    </select>
+                  </div>
+                  <span className="cal-modal-when-arrow"><ArrowRight size={16} /></span>
+                  <div className="cal-modal-when-field">
+                    <input className="cal-modal-input" value={endDT} readOnly />
+                  </div>
+                  <div className="cal-modal-when-field">
+                    <select className="cal-modal-select" value={timezone} readOnly>
+                      <option>{timezone}</option>
+                    </select>
+                  </div>
+                </div>
+                <label className="cal-modal-toggle-row">
+                  <button
+                    className={`cal-modal-toggle ${allDay ? 'on' : ''}`}
+                    onClick={() => setAllDay(!allDay)}
+                    role="switch"
+                    aria-checked={allDay}
+                  >
+                    <span className="cal-modal-toggle-thumb" />
+                  </button>
+                  All day event
+                </label>
+              </div>
+
+              <div className="cal-modal-section">
+                <h4 className="cal-modal-section-title">
+                  <MapPin size={16} className="cal-modal-section-icon" style={{ color: '#22c55e' }} />
+                  Location
+                </h4>
+                <div className="cal-modal-location-wrap">
+                  <MapPin size={16} className="cal-modal-location-icon" />
+                  <input
+                    className="cal-modal-input cal-modal-location-input"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="Search for a place"
+                  />
+                  {location && (
+                    <a
+                      className="cal-modal-map-link"
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="View on Map"
+                    >
+                      <Globe size={16} />
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              <div className="cal-modal-section">
+                <h4 className="cal-modal-section-title">
+                  <StickyNote size={16} className="cal-modal-section-icon" style={{ color: '#f59e0b' }} />
+                  Description
+                </h4>
+                <div className="cal-modal-editor">
+                  <div className="cal-modal-editor-toolbar">
+                    <button className="cal-modal-editor-btn" onClick={() => execFormat('bold')} title="Bold"><Bold size={16} /></button>
+                    <button className="cal-modal-editor-btn" onClick={() => execFormat('italic')} title="Italic"><Italic size={16} /></button>
+                    <button className="cal-modal-editor-btn" onClick={() => execFormat('underline')} title="Underline"><Underline size={16} /></button>
+                    <span className="cal-modal-editor-sep" />
+                    <button className="cal-modal-editor-btn" onClick={() => execFormat('insertUnorderedList')} title="Bullet List"><List size={16} /></button>
+                    <button className="cal-modal-editor-btn" onClick={() => execFormat('insertOrderedList')} title="Numbered List"><ListOrdered size={16} /></button>
+                    <button className="cal-modal-editor-btn" title="Checklist"><ListChecks size={16} /></button>
+                  </div>
+                  <div
+                    ref={descRef}
+                    className="cal-modal-editor-area"
+                    contentEditable
+                    suppressContentEditableWarning
+                    dangerouslySetInnerHTML={{ __html: description }}
+                    onBlur={(e) => setDescription(e.currentTarget.innerHTML)}
+                    data-placeholder="Add notes, details, or instructions..."
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="cal-modal-footer">
+              <div className="cal-modal-footer-left">
+                <button className="cal-modal-footer-btn cal-modal-delete-btn">
+                  <Trash2 size={15} /> Delete
+                </button>
+                <button className="cal-modal-footer-btn cal-modal-dup-btn">
+                  <Copy size={15} /> Duplicate
+                </button>
+              </div>
+              <div className="cal-modal-footer-right">
+                <button className="cal-modal-footer-btn cal-modal-cancel-btn" onClick={handleClose}>Cancel</button>
+                <button className="cal-modal-footer-btn cal-modal-save-btn" onClick={handleClose}>
+                  <Save size={15} /> Save Event
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <ChatBotTab destination={destination} />
+        )}
       </div>
     </div>
   );
@@ -568,7 +739,7 @@ function ItineraryCalendar({ tripTitle, destination }) {
         <WeekView dates={allDates} itinerary={SAMPLE_ITINERARY} onEventClick={setSelectedEvent} />
       )}
 
-      <EventDetailPanel event={selectedEvent} onClose={() => setSelectedEvent(null)} currentDate={currentDate} />
+      <EventDetailPanel event={selectedEvent} onClose={() => setSelectedEvent(null)} currentDate={currentDate} destination={destination} />
     </div>
   );
 }
