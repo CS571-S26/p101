@@ -1,38 +1,17 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Compass, Map, ChevronDown, Settings, Sun, Moon, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ChevronDown, Settings, Sun, Moon, LogOut } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 function TopNavbar() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { theme, toggleTheme, user } = useTheme();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  const isActive = (path) => location.pathname === path;
 
   return (
     <nav className="top-navbar">
       <div className="navbar-left" onClick={() => navigate('/home')} style={{ cursor: 'pointer' }}>
-        <Compass size={24} className="navbar-logo-icon" />
-        <span className="navbar-brand">VOYAGO</span>
-      </div>
-
-      <div className="navbar-center">
-        <button
-          className={`navbar-tab ${isActive('/home') || isActive('/trips') ? 'navbar-tab-active' : ''}`}
-          onClick={() => navigate('/home')}
-        >
-          <Map size={16} />
-          Trips
-        </button>
-        <button
-          className={`navbar-tab ${isActive('/experiences') ? 'navbar-tab-active' : ''}`}
-          onClick={() => navigate('/experiences')}
-        >
-          <Compass size={16} />
-          Experiences
-        </button>
+        <span className="navbar-logo-box">VOYAGO</span>
       </div>
 
       <div className="navbar-right">
@@ -51,7 +30,7 @@ function TopNavbar() {
               </div>
               <button className="navbar-dropdown-item" onClick={() => { toggleTheme(); setDropdownOpen(false); }}>
                 {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
-                Switch Theme
+                {theme === 'light' ? 'Switch Theme (Blue)' : 'Switch Theme (Light)'}
               </button>
               <button className="navbar-dropdown-item" onClick={() => { navigate('/settings'); setDropdownOpen(false); }}>
                 <Settings size={16} />

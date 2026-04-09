@@ -4,12 +4,14 @@
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 2rem;
+  animation: fadeInUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .groups-page-title {
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
+  letter-spacing: -0.3px;
 }
 
 .groups-page-subtitle {
@@ -30,13 +32,16 @@
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  font-family: inherit;
 }
 
 .groups-create-btn:hover {
   background: var(--accent);
   color: var(--accent-dark);
   border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px var(--glow-color);
 }
 
 /* ── Groups Layout (list + detail) ── */
@@ -51,15 +56,17 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  animation: fadeInUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
 }
 
 .group-detail-panel {
   flex: 1;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
-  border-radius: 16px;
+  border-radius: 18px;
   overflow-y: auto;
   max-height: calc(100vh - 220px);
+  animation: fadeInUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
 }
 
 /* ── Group Cards ── */
@@ -67,16 +74,17 @@
   display: flex;
   background: var(--surface-bg-subtle);
   border: 1px solid var(--card-border);
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .group-card:hover {
   border-color: var(--accent-bg);
   background: var(--surface-bg-hover);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px var(--card-hover-shadow);
 }
 
 .group-card-selected {
@@ -376,27 +384,31 @@
   border: none;
   background: var(--accent);
   color: var(--accent-dark);
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 0.9rem;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  font-family: inherit;
 }
 
 .group-plan-trip-btn:hover {
   background: var(--accent-hover);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--glow-color);
 }
 
 /* ── Create Group Modal ── */
 .group-modal {
   background: var(--modal-bg);
   border: 1px solid var(--card-border);
-  border-radius: 16px;
+  border-radius: 20px;
   width: 100%;
   max-width: 480px;
   padding: 0;
   overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+  animation: scaleIn 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .group-modal-header {
@@ -576,16 +588,17 @@
 .chat-bubble {
   background: var(--surface-bg);
   border: 1px solid var(--card-border);
-  border-radius: 12px 12px 12px 4px;
+  border-radius: 14px 14px 14px 4px;
   padding: 10px 14px;
   max-width: 85%;
   align-self: flex-start;
+  animation: fadeInUp 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .chat-bubble-self {
   background: var(--accent-bg-subtle);
   border-color: var(--accent-bg);
-  border-radius: 12px 12px 4px 12px;
+  border-radius: 14px 14px 4px 14px;
   align-self: flex-end;
 }
 
@@ -660,12 +673,13 @@
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
-  transition: all 0.2s;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .group-chat-send:hover {
   background: var(--accent-hover);
-  transform: scale(1.05);
+  transform: scale(1.08);
+  box-shadow: 0 4px 16px var(--glow-color);
 }
 
 /* ── Responsive ── */

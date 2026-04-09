@@ -81,6 +81,11 @@ function NewTrip() {
   const [destination, setDestination] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+
+  const handleStartDateChange = (val) => {
+    setStartDate(val);
+    if (endDate && val > endDate) setEndDate('');
+  };
   const [numPeople, setNumPeople] = useState('');
   const [groupOption, setGroupOption] = useState('individual');
   const [groupName, setGroupName] = useState('');
@@ -286,7 +291,7 @@ function NewTrip() {
                       type="date"
                       className="newtrip-input"
                       value={startDate}
-                      onChange={(e) => setStartDate(e.target.value)}
+                      onChange={(e) => handleStartDateChange(e.target.value)}
                       required
                     />
                   </Form.Group>
@@ -298,6 +303,7 @@ function NewTrip() {
                       type="date"
                       className="newtrip-input"
                       value={endDate}
+                      min={startDate || undefined}
                       onChange={(e) => setEndDate(e.target.value)}
                       required
                     />

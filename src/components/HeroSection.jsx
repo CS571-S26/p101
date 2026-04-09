@@ -1,6 +1,6 @@
 import TripSearchCard from './TripSearchCard';
 
-function HeroSection() {
+function HeroSection({ onStartPlan }) {
   return (
     <section className="hero-section">
       <div className="hero-overlay">
@@ -8,7 +8,7 @@ function HeroSection() {
         <p className="hero-subtitle">
           The best trips aren't about the destination &mdash; they're about who's beside you
         </p>
-        <TripSearchCard />
+        <TripSearchCard onStartPlan={onStartPlan} />
       </div>
     </section>
   );

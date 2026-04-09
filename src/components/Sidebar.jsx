@@ -54,8 +54,8 @@ function Sidebar() {
 
       <div className="sidebar-bottom">
         <button className="sidebar-item sidebar-theme-btn" onClick={toggleTheme} title="Toggle theme">
-          {theme === 'blue' ? <Moon size={20} /> : <Sun size={20} />}
-          {sidebarOpen && <span>{theme === 'blue' ? 'Dark Mode' : 'Blue Mode'}</span>}
+          {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+          {sidebarOpen && <span>{theme === 'light' ? 'Blue Mode' : 'Light Mode'}</span>}
         </button>
 
         <button className="sidebar-item sidebar-logout" onClick={() => navigate('/login')} title="Logout">

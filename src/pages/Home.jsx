@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TopNavbar from '../components/TopNavbar';
 import HeroSection from '../components/HeroSection';
 import AdventuresSection from '../components/AdventuresSection';
-import TripModal from '../components/TripModal';
+import NewTripModal from '../components/NewTripModal';
 import './Home.css';
+import './NewTrip.css';
 
 const sampleTrips = [
   {
@@ -48,52 +50,41 @@ const sampleTrips = [
 ];
 
 function Home() {
+  const navigate = useNavigate();
   const [trips] = useState(sampleTrips);
-  const [selectedTrip, setSelectedTrip] = useState(null);
-  const [editingDay, setEditingDay] = useState(null);
-  const [editText, setEditText] = useState('');
+  const [newTripOpen, setNewTripOpen] = useState(false);
+  const [newTripData, setNewTripData] = useState(null);
 
-  const openModal = (trip) => {
-    setSelectedTrip(trip);
-    setEditingDay(null);
+  const handleTripClick = (trip) => {
+    navigate('/trips/new/details', {
+      state: {
+        title: trip.title,
+        destination: trip.title.replace('Trip to ', ''),
+        startDate: trip.startDate,
+        endDate: trip.endDate,
+        numPeople: trip.travelers,
+        members: trip.members,
+        image: trip.image,
+        planTier: trip.planTier,
+      },
+    });
   };
 
-  const closeModal = () => {
-    setSelectedTrip(null);
-    setEditingDay(null);
-  };
-
-  const handleDelete = (tripId) => {
-    if (window.confirm('Are you sure you want to delete this trip?')) {
-      closeModal();
-    }
-  };
-
-  const startEdit = (dayIndex, details) => {
-    setEditingDay(dayIndex);
-    setEditText(details);
-  };
-
-  const saveEdit = () => {
-    setEditingDay(null);
+  const handleStartPlan = (data) => {
+    setNewTripData(data);
+    setNewTripOpen(true);
   };
 
   return (
     <div className="home-v2">
       <TopNavbar />
-      <HeroSection />
-      <AdventuresSection trips={trips} onTripClick={openModal} />
+      <HeroSection onStartPlan={handleStartPlan} />
+      <AdventuresSection trips={trips} onTripClick={handleTripClick} />
 
-      <TripModal
-        trip={selectedTrip}
-        editingDay={editingDay}
-        editText={editText}
-        onClose={closeModal}
-        onDelete={handleDelete}
-        onStartEdit={startEdit}
-        onEditTextChange={setEditText}
-        onSaveEdit={saveEdit}
-        onCancelEdit={() => setEditingDay(null)}
+      <NewTripModal
+        isOpen={newTripOpen}
+        onClose={() => setNewTripOpen(false)}
+        initialData={newTripData}
       />
     </div>
   );
