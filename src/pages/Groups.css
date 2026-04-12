@@ -1,0 +1,728 @@
+/* ── Groups Header ── */
+.groups-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  animation: fadeInUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.groups-page-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.3px;
+}
+
+.groups-page-subtitle {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.groups-create-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border: 1.5px solid var(--input-border);
+  border-radius: 30px;
+  background: var(--surface-bg);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  font-family: inherit;
+}
+
+.groups-create-btn:hover {
+  background: var(--accent);
+  color: var(--accent-dark);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px var(--glow-color);
+}
+
+/* ── Groups Layout (list + detail) ── */
+.groups-layout {
+  display: flex;
+  gap: 2rem;
+  min-height: calc(100vh - 220px);
+}
+
+.groups-list {
+  flex: 0 0 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeInUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+
+.group-detail-panel {
+  flex: 1;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  overflow-y: auto;
+  max-height: calc(100vh - 220px);
+  animation: fadeInUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+
+/* ── Group Cards ── */
+.group-card {
+  display: flex;
+  background: var(--surface-bg-subtle);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.group-card:hover {
+  border-color: var(--accent-bg);
+  background: var(--surface-bg-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px var(--card-hover-shadow);
+}
+
+.group-card-selected {
+  border-color: var(--accent) !important;
+  background: var(--accent-bg-subtle) !important;
+}
+
+.group-card-accent {
+  width: 5px;
+  flex-shrink: 0;
+}
+
+.group-card-body {
+  flex: 1;
+  padding: 1rem 1.1rem;
+}
+
+.group-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.group-card-name {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.group-card-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--surface-bg);
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+
+.group-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.group-avatars {
+  display: flex;
+  gap: 0;
+}
+
+.group-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin-left: -6px;
+  border: 2px solid var(--card-bg);
+}
+
+.group-avatar:first-child {
+  margin-left: 0;
+}
+
+.group-avatar-more {
+  background: var(--surface-bg-hover) !important;
+  color: var(--text-secondary) !important;
+  font-size: 0.65rem;
+}
+
+.group-card-trips {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: var(--text-faint);
+}
+
+/* ── Add Group Card ── */
+.group-card-add {
+  border: 2px dashed var(--border-dashed);
+  background: transparent;
+  justify-content: center;
+}
+
+.group-card-add:hover {
+  border-color: var(--accent);
+  background: var(--accent-bg-subtle);
+}
+
+.group-card-add-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem;
+  gap: 8px;
+  color: var(--text-faint);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.group-card-add:hover .group-card-add-content {
+  color: var(--accent);
+}
+
+/* ── Detail Panel Empty ── */
+.group-detail-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 400px;
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-faint);
+}
+
+.group-detail-empty svg {
+  margin-bottom: 1rem;
+  opacity: 0.4;
+}
+
+.group-detail-empty h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.group-detail-empty p {
+  font-size: 0.88rem;
+  max-width: 260px;
+  line-height: 1.5;
+}
+
+/* ── Detail Panel Content ── */
+.group-detail-content {
+  padding: 1.5rem;
+}
+
+.group-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.group-detail-title-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.group-detail-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+  flex-shrink: 0;
+}
+
+.group-detail-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.group-detail-meta {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0.2rem 0 0;
+}
+
+.group-delete-btn {
+  padding: 8px;
+  border: 1px solid var(--danger-border);
+  border-radius: 8px;
+  background: var(--danger-bg);
+  color: var(--danger);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.group-delete-btn:hover {
+  background: var(--danger-bg);
+  border-color: var(--danger);
+}
+
+/* ── Members Section ── */
+.group-members-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+.group-members-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.group-member-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  transition: background 0.15s;
+}
+
+.group-member-row:hover {
+  background: var(--surface-bg-subtle);
+}
+
+.group-member-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+  flex-shrink: 0;
+}
+
+.group-member-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.group-member-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.group-member-email {
+  font-size: 0.78rem;
+  color: var(--text-faint);
+}
+
+.group-member-role {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: var(--surface-bg);
+  color: var(--text-faint);
+}
+
+.role-admin {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.group-member-remove {
+  padding: 4px;
+  border: none;
+  background: transparent;
+  color: var(--text-faint);
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+
+.group-member-remove:hover {
+  color: var(--danger);
+  background: var(--danger-bg);
+}
+
+/* ── Plan Trip Button ── */
+.group-plan-trip-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 2rem;
+  padding: 12px;
+  border: none;
+  background: var(--accent);
+  color: var(--accent-dark);
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  font-family: inherit;
+}
+
+.group-plan-trip-btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--glow-color);
+}
+
+/* ── Create Group Modal ── */
+.group-modal {
+  background: var(--modal-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 480px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+  animation: scaleIn 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.group-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.group-modal-header h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.group-modal-close {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+
+.group-modal-close:hover {
+  color: var(--text-primary);
+  background: var(--surface-bg-hover);
+}
+
+.group-modal-form {
+  padding: 1.5rem;
+}
+
+.group-modal-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.3px;
+}
+
+.group-modal-input {
+  background: var(--input-bg) !important;
+  border: 1.5px solid var(--input-border) !important;
+  border-radius: 10px !important;
+  color: var(--text-primary) !important;
+  padding: 10px 14px !important;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+
+.group-modal-input::placeholder {
+  color: var(--text-faint) !important;
+}
+
+.group-modal-input:focus {
+  border-color: var(--input-focus-border) !important;
+  box-shadow: 0 0 0 2px var(--accent-bg) !important;
+  background: var(--surface-bg-hover) !important;
+}
+
+.group-modal-textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+.group-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 0.5rem;
+}
+
+.group-modal-cancel {
+  border-radius: 30px !important;
+  font-weight: 600;
+  padding: 10px 22px !important;
+  opacity: 0.7;
+}
+
+.group-modal-cancel:hover {
+  opacity: 1;
+}
+
+.group-modal-submit {
+  border-radius: 30px !important;
+  font-weight: 700;
+  padding: 10px 24px !important;
+  letter-spacing: 0.5px;
+}
+
+.group-modal-submit:hover {
+  background: var(--accent) !important;
+  color: var(--accent-dark) !important;
+}
+
+/* ── Detail Split Layout ── */
+.group-detail-split {
+  display: flex;
+  gap: 0;
+  min-height: calc(100vh - 340px);
+}
+
+.group-detail-left {
+  flex: 0 0 40%;
+  padding-right: 1.25rem;
+  border-right: 1px solid var(--card-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.group-detail-left .group-members-section {
+  flex: 1;
+}
+
+.group-detail-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-left: 1.25rem;
+  min-width: 0;
+}
+
+/* ── Chat Header ── */
+.group-chat-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+/* ── Chat Messages ── */
+.group-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 4px;
+  margin-bottom: 1rem;
+  min-height: 200px;
+  max-height: calc(100vh - 440px);
+}
+
+.group-chat-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: var(--text-faint);
+  gap: 8px;
+}
+
+.group-chat-empty svg {
+  opacity: 0.3;
+}
+
+.group-chat-empty p {
+  font-size: 0.82rem;
+  margin: 0;
+  max-width: 200px;
+  line-height: 1.5;
+}
+
+/* ── Chat Bubbles ── */
+.chat-bubble {
+  background: var(--surface-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px 14px 14px 4px;
+  padding: 10px 14px;
+  max-width: 85%;
+  align-self: flex-start;
+  animation: fadeInUp 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.chat-bubble-self {
+  background: var(--accent-bg-subtle);
+  border-color: var(--accent-bg);
+  border-radius: 14px 14px 4px 14px;
+  align-self: flex-end;
+}
+
+.chat-bubble-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.chat-bubble-sender {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.chat-bubble-self .chat-bubble-sender {
+  color: var(--accent-hover);
+}
+
+.chat-bubble-time {
+  font-size: 0.68rem;
+  color: var(--text-faint);
+}
+
+.chat-bubble-text {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.45;
+  word-wrap: break-word;
+}
+
+/* ── Chat Input Bar ── */
+.group-chat-input-bar {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.group-chat-input {
+  flex: 1;
+  background: var(--input-bg);
+  border: 1.5px solid var(--input-border);
+  border-radius: 24px;
+  color: var(--text-primary);
+  padding: 10px 16px;
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.group-chat-input::placeholder {
+  color: var(--text-faint);
+}
+
+.group-chat-input:focus {
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 2px var(--accent-bg);
+}
+
+.group-chat-send {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: var(--accent);
+  color: var(--accent-dark);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.group-chat-send:hover {
+  background: var(--accent-hover);
+  transform: scale(1.08);
+  box-shadow: 0 4px 16px var(--glow-color);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .groups-layout {
+    flex-direction: column;
+  }
+
+  .groups-list {
+    flex: none;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 8px;
+  }
+
+  .group-card {
+    min-width: 260px;
+    flex-shrink: 0;
+  }
+
+  .group-detail-panel {
+    max-height: none;
+  }
+
+  .group-detail-split {
+    flex-direction: column;
+  }
+
+  .group-detail-left {
+    flex: none;
+    padding-right: 0;
+    border-right: none;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .group-detail-right {
+    padding-left: 0;
+  }
+
+  .group-chat-messages {
+    max-height: 300px;
+  }
+}

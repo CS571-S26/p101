@@ -1,0 +1,130 @@
+/* ── Place Autocomplete ── */
+.place-autocomplete {
+  position: relative;
+  width: 100%;
+}
+
+.place-input-wrap {
+  position: relative;
+}
+
+.place-spinner,
+.place-check {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+}
+
+.place-spinner {
+  color: var(--text-faint);
+}
+
+.place-check {
+  color: var(--accent, #22c55e);
+  opacity: 0.7;
+}
+
+.place-confirmed {
+  padding-right: 36px !important;
+}
+
+.place-spin-icon {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Dropdown ── */
+.place-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--modal-bg, #fff);
+  border: 1px solid var(--card-border, #e5e7eb);
+  border-radius: 12px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15);
+  z-index: 50;
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+  max-height: 240px;
+  overflow-y: auto;
+  animation: scaleIn 0.15s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.place-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-size: 0.88rem;
+  color: var(--text-secondary, #334155);
+}
+
+.place-dropdown-item:hover,
+.place-dropdown-item.active {
+  background: var(--surface-bg-hover, #f3f4f6);
+  color: var(--text-primary, #0f172a);
+}
+
+.place-dropdown-icon {
+  color: var(--accent, #f97316);
+  flex-shrink: 0;
+}
+
+.place-dropdown-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Hero variant (white search card) ── */
+.search-input-hero {
+  border: 1.5px solid #e8ecf4 !important;
+  border-radius: 12px !important;
+  padding: 10px 14px !important;
+  font-size: 0.95rem !important;
+  color: #0f172a !important;
+  background: #fafbfd !important;
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+}
+
+.search-input-hero::placeholder {
+  color: #94a3b8 !important;
+}
+
+.search-input-hero:focus {
+  border-color: #f97316 !important;
+  background: #fff !important;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.08) !important;
+  outline: none;
+}
+
+.search-card .place-dropdown {
+  background: #fff;
+  border-color: #e8ecf4;
+}
+
+.search-card .place-dropdown-item {
+  color: #334155;
+}
+
+.search-card .place-dropdown-item:hover,
+.search-card .place-dropdown-item.active {
+  background: #f3f4f6;
+  color: #0f172a;
+}
+
+.search-card .place-dropdown-icon {
+  color: #f97316;
+}

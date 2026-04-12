@@ -1,0 +1,373 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Form, Button, Row, Col } from 'react-bootstrap';
+import { X, ArrowRight, ArrowLeft, Star } from 'lucide-react';
+import PlaceAutocomplete from './PlaceAutocomplete';
+
+const interestOptions = [
+  'Museums', 'Food & Dining', 'Adventure', 'Nightlife',
+  'Nature & Hiking', 'Shopping', 'History', 'Beach',
+  'Photography', 'Local Culture',
+];
+
+function NewTripModal({ isOpen, onClose, initialData }) {
+  const navigate = useNavigate();
+  const [step, setStep] = useState(1);
+
+  const [title, setTitle] = useState('');
+  const [destination, setDestination] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [numPeople, setNumPeople] = useState('');
+  const [groupOption, setGroupOption] = useState('individual');
+  const [groupName, setGroupName] = useState('');
+  const [inviteEmails, setInviteEmails] = useState('');
+
+  const [currentLocation, setCurrentLocation] = useState('');
+  const [budget, setBudget] = useState('');
+  const [tripType, setTripType] = useState('');
+  const [accommodation, setAccommodation] = useState('');
+  const [transport, setTransport] = useState('');
+  const [interests, setInterests] = useState([]);
+  const [interestError, setInterestError] = useState('');
+  const [notes, setNotes] = useState('');
+
+  useEffect(() => {
+    if (initialData) {
+      if (initialData.destination) setDestination(initialData.destination);
+      if (initialData.startDate) setStartDate(initialData.startDate);
+    }
+  }, [initialData]);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      setStep(1);
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  const toggleInterest = (interest) => {
+    setInterests((prev) => {
+      const next = prev.includes(interest) ? prev.filter((i) => i !== interest) : [...prev, interest];
+      if (next.length >= 3) setInterestError('');
+      return next;
+    });
+  };
+
+  const handleStep1Next = (e) => {
+    e.preventDefault();
+    setStep(2);
+  };
+
+  const handleGenerate = (e) => {
+    e.preventDefault();
+    if (interests.length < 3) {
+      setInterestError('Please select at least 3 interests');
+      return;
+    }
+    setInterestError('');
+    const tripData = {
+      title, destination, startDate, endDate, numPeople,
+      groupOption, groupName, inviteEmails,
+      currentLocation, budget, tripType, accommodation, transport,
+      interests: interests.join(', '), notes,
+    };
+    onClose();
+    navigate('/trips/new/details', { state: tripData });
+  };
+
+  return (
+    <div className="newtrip-modal-overlay" onClick={onClose}>
+      <div className="newtrip-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="newtrip-modal-header">
+          <div>
+            <h2 className="newtrip-modal-title">
+              {step === 1 ? 'Create a New Trip' : 'Trip Preferences'}
+            </h2>
+            <p className="newtrip-modal-subtitle">
+              {step === 1
+                ? 'Start by filling in the basics'
+                : `Tell us more about "${title || 'your trip'}" so we can plan it`}
+            </p>
+          </div>
+          <div className="newtrip-modal-header-right">
+            <span className="newtrip-step-indicator">Step {step} of 2</span>
+            <button className="newtrip-modal-close" onClick={onClose}>
+              <X size={20} />
+            </button>
+          </div>
+        </div>
+
+        <div className="newtrip-modal-body">
+          {step === 1 && (
+            <Form onSubmit={handleStep1Next} className="newtrip-form">
+              <Form.Group className="mb-3">
+                <Form.Label className="newtrip-label">Trip Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="e.g. Summer in Europe"
+                  className="newtrip-input"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  required
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label className="newtrip-label">Destination</Form.Label>
+                <PlaceAutocomplete
+                  value={destination}
+                  onChange={setDestination}
+                  placeholder="e.g. Paris, France"
+                  className="newtrip-input"
+                  required
+                />
+              </Form.Group>
+
+              <Row>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label className="newtrip-label">Start Date</Form.Label>
+                    <Form.Control
+                      type="date"
+                      className="newtrip-input"
+                      value={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label className="newtrip-label">End Date</Form.Label>
+                    <Form.Control
+                      type="date"
+                      className="newtrip-input"
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      min={startDate || undefined}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+
+              <Form.Group className="mb-3">
+                <Form.Label className="newtrip-label">Number of People</Form.Label>
+                <Form.Control
+                  type="number"
+                  min="1"
+                  placeholder="How many travelers?"
+                  className="newtrip-input"
+                  value={numPeople}
+                  onChange={(e) => setNumPeople(e.target.value)}
+                  required
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label className="newtrip-label">Travel With</Form.Label>
+                <div className="group-toggle">
+                  <button
+                    type="button"
+                    className={`group-toggle-btn ${groupOption === 'individual' ? 'active' : ''}`}
+                    onClick={() => setGroupOption('individual')}
+                  >
+                    Individual
+                  </button>
+                  <button
+                    type="button"
+                    className={`group-toggle-btn ${groupOption === 'group' ? 'active' : ''}`}
+                    onClick={() => setGroupOption('group')}
+                  >
+                    Add to Group
+                  </button>
+                </div>
+              </Form.Group>
+
+              {groupOption === 'group' && (
+                <Form.Group className="mb-3">
+                  <Form.Label className="newtrip-label">Group Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="e.g. College Friends"
+                    className="newtrip-input"
+                    value={groupName}
+                    onChange={(e) => setGroupName(e.target.value)}
+                  />
+                </Form.Group>
+              )}
+
+              <Form.Group className="mb-3">
+                <Form.Label className="newtrip-label">Invite Members (emails, comma-separated)</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={2}
+                  placeholder="friend1@email.com, friend2@email.com"
+                  className="newtrip-input newtrip-textarea"
+                  value={inviteEmails}
+                  onChange={(e) => setInviteEmails(e.target.value)}
+                />
+              </Form.Group>
+
+              <Button type="submit" variant="outline-light" className="newtrip-submit w-100">
+                Next: Trip Preferences
+                <ArrowRight size={18} style={{ marginLeft: '8px' }} />
+              </Button>
+            </Form>
+          )}
+
+          {step === 2 && (
+            <Form onSubmit={handleGenerate} className="newtrip-form">
+              {startDate && endDate && (
+                <div className="proposed-dates-bar">
+                  <span className="proposed-dates-label">Trip dates:</span>
+                  <span className="proposed-dates-value">{startDate} to {endDate}</span>
+                </div>
+              )}
+
+              <Form.Group className="mb-3">
+                <Form.Label className="newtrip-label">Your Current Location <span className="newtrip-required">*</span></Form.Label>
+                <PlaceAutocomplete
+                  value={currentLocation}
+                  onChange={setCurrentLocation}
+                  placeholder="e.g. New York, USA"
+                  className="newtrip-input"
+                  required
+                />
+              </Form.Group>
+
+              <Row>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label className="newtrip-label">Budget (per person) <span className="newtrip-required">*</span></Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="e.g. $2,000"
+                      className="newtrip-input"
+                      value={budget}
+                      onChange={(e) => setBudget(e.target.value)}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label className="newtrip-label">Trip Type <span className="newtrip-required">*</span></Form.Label>
+                    <Form.Select
+                      className="newtrip-input newtrip-select"
+                      value={tripType}
+                      onChange={(e) => setTripType(e.target.value)}
+                      required
+                    >
+                      <option value="">Select type...</option>
+                      <option value="adventure">Adventure</option>
+                      <option value="relaxation">Relaxation</option>
+                      <option value="cultural">Cultural</option>
+                      <option value="road-trip">Road Trip</option>
+                      <option value="business">Business</option>
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label className="newtrip-label">Accommodation <span className="newtrip-required">*</span></Form.Label>
+                    <Form.Select
+                      className="newtrip-input newtrip-select"
+                      value={accommodation}
+                      onChange={(e) => setAccommodation(e.target.value)}
+                      required
+                    >
+                      <option value="">Select preference...</option>
+                      <option value="hotel">Hotel</option>
+                      <option value="airbnb">Airbnb</option>
+                      <option value="hostel">Hostel</option>
+                      <option value="resort">Resort</option>
+                      <option value="camping">Camping</option>
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label className="newtrip-label">Transportation <span className="newtrip-required">*</span></Form.Label>
+                    <Form.Select
+                      className="newtrip-input newtrip-select"
+                      value={transport}
+                      onChange={(e) => setTransport(e.target.value)}
+                      required
+                    >
+                      <option value="">Select preference...</option>
+                      <option value="flight">Flight</option>
+                      <option value="train">Train</option>
+                      <option value="car">Rental Car</option>
+                      <option value="bus">Bus</option>
+                      <option value="mixed">Mixed</option>
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+              </Row>
+
+              <Form.Group className="mb-3">
+                <div className="newtrip-label-row">
+                  <Form.Label className="newtrip-label">Interests <span className="newtrip-required">*</span></Form.Label>
+                  <span className={`newtrip-interest-count ${interests.length >= 3 ? 'valid' : ''}`}>
+                    {interests.length}/3 min
+                  </span>
+                </div>
+                <div className="interests-grid">
+                  {interestOptions.map((interest) => (
+                    <span
+                      key={interest}
+                      className={`interest-chip ${interests.includes(interest) ? 'active' : ''}`}
+                      onClick={() => toggleInterest(interest)}
+                    >
+                      {interest}
+                    </span>
+                  ))}
+                </div>
+                {interestError && <p className="newtrip-field-error">{interestError}</p>}
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label className="newtrip-label">Additional Notes</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={2}
+                  placeholder="Any special requests, must-see places, dietary needs..."
+                  className="newtrip-input newtrip-textarea"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                />
+              </Form.Group>
+
+              <div className="newtrip-modal-actions">
+                <Button
+                  variant="outline-light"
+                  className="newtrip-back-btn"
+                  onClick={() => setStep(1)}
+                >
+                  <ArrowLeft size={18} style={{ marginRight: '6px' }} />
+                  Back
+                </Button>
+                <Button type="submit" variant="outline-light" className="newtrip-submit">
+                  Generate Itinerary
+                  <Star size={18} style={{ marginLeft: '8px' }} />
+                </Button>
+              </div>
+            </Form>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default NewTripModal;
