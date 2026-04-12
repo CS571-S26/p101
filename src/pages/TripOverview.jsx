@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import { Users, PlusCircle } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
 import './Home.css';
-import './NewTrip.css';
 
 const inPlanningTrips = [
   {

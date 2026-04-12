@@ -4,7 +4,6 @@ import Signup from './pages/Signup'
 import Home from './pages/Home'
 import TripOverview from './pages/TripOverview'
 import TripDetails from './pages/TripDetails'
-import Groups from './pages/Groups'
 import Settings from './pages/Settings'
 import './App.css'
 
@@ -17,7 +16,6 @@ function App() {
       <Route path="/home" element={<Home />} />
       <Route path="/trips" element={<TripOverview />} />
       <Route path="/trips/new/details" element={<TripDetails />} />
-      <Route path="/groups" element={<Groups />} />
       <Route path="/settings" element={<Settings />} />
     </Routes>
   )

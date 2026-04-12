@@ -42,14 +42,6 @@ function Sidebar() {
           <Calendar size={20} />
           {sidebarOpen && <span>Active Trips</span>}
         </button>
-        <button
-          className={`sidebar-item ${path === '/groups' ? 'active' : ''}`}
-          onClick={() => navigate('/groups')}
-          title="Group"
-        >
-          <Users size={20} />
-          {sidebarOpen && <span>Group</span>}
-        </button>
       </nav>
 
       <div className="sidebar-bottom">

@@ -25,28 +25,7 @@ const sampleTrips = [
       { day: 'Day 2', title: 'Manhattan Tour', details: 'Central Park, MoMA, Broadway show' },
       { day: 'Day 3', title: 'Brooklyn Bridge', details: 'Walk across, DUMBO area, pizza' },
     ],
-  },
-  {
-    id: 2,
-    title: 'Trip to Delhi',
-    dates: 'Apr 4 – Apr 15',
-    startDate: '2026-04-04',
-    endDate: '2026-04-15',
-    travelers: 3,
-    nights: 11,
-    planTier: 'Voyago Free',
-    image: 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&q=80',
-    status: 'In-Planning',
-    members: [
-      { name: 'Shashwat', color: '#f97316' },
-      { name: 'Sarah', color: '#22c55e' },
-      { name: 'Zara', color: '#3b82f6' },
-    ],
-    itinerary: [
-      { day: 'Day 1', title: 'Old Delhi', details: 'Red Fort, Chandni Chowk, street food tour' },
-      { day: 'Day 2', title: 'New Delhi', details: 'India Gate, Lotus Temple, Qutub Minar' },
-    ],
-  },
+  }
 ];
 
 function Home() {
