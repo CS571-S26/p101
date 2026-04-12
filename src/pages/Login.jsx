@@ -17,7 +17,6 @@ function Login() {
       alert('Please enter both email and password');
       return;
     }
-    alert('Hi ' + email + ', you are logged in!');
     navigate('/home');
   };
 
