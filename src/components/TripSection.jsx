@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { Plus } from 'lucide-react';
 import TripCard from './TripCard';
 
 function TripSection({ title, dotClass, trips, emptyMessage, onTripClick }) {
@@ -20,10 +21,7 @@ function TripSection({ title, dotClass, trips, emptyMessage, onTripClick }) {
         <div className="empty-section">
           <p className="empty-section-text">{emptyMessage}</p>
           <button className="empty-section-btn" onClick={() => navigate('/trips')}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
+            <Plus size={16} />
             Plan a Trip
           </button>
         </div>

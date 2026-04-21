@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Container, Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
+import { Sun, Moon } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 import './Auth.css';
 
 function Login() {
@@ -8,13 +10,13 @@ function Login() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
 
   const handleLogin = () => {
     if (!email || !password) {
       alert('Please enter both email and password');
       return;
     }
-    alert('Hi ' + email + ', you are logged in!');
     navigate('/home');
   };
 
@@ -29,6 +31,9 @@ function Login() {
 
   return (
     <Container fluid className="auth-page p-0">
+      <button className="auth-theme-toggle" onClick={toggleTheme} title={theme === 'light' ? 'Switch to Blue' : 'Switch to Light'}>
+        {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+      </button>
       <Row className="auth-container mx-auto g-0">
         {/* Left Panel - Hero */}
         <Col md={6} className="auth-left d-none d-md-flex">

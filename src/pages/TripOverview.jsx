@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
+import { Users, PlusCircle } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
 import './Home.css';
-import './NewTrip.css';
 
 const inPlanningTrips = [
   {
@@ -51,10 +51,7 @@ function TripOverview() {
                 <p className="trip-card-dates">{trip.dates}</p>
                 <div className="trip-card-footer">
                   <span className="trip-members">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                      <circle cx="9" cy="7" r="4" />
-                    </svg>
+                    <Users size={16} />
                     {trip.members} members
                   </span>
                   <button className="trip-view-btn">View</button>
@@ -66,11 +63,7 @@ function TripOverview() {
           <div className="trip-card add-trip-card" onClick={() => navigate('/trips/new')}>
             <div className="add-trip-content">
               <div className="add-trip-icon">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="8" x2="12" y2="16" />
-                  <line x1="8" y1="12" x2="16" y2="12" />
-                </svg>
+                <PlusCircle size={40} strokeWidth={1.5} />
               </div>
               <h3 className="add-trip-label">Plan a New Trip</h3>
               <p className="add-trip-hint">Start planning your next adventure</p>
