@@ -4,42 +4,9 @@ import { Users, PlusCircle, ArrowLeft } from 'lucide-react';
 import TopNavbar from '../components/TopNavbar';
 import NewTripModal from '../components/NewTripModal';
 import { useState } from 'react';
+import { sampleTrips } from '../data/trips';
 import './Home.css';
 import './NewTrip.css';
-
-const inPlanningTrips = [
-  {
-    id: 2,
-    title: 'Tokyo Adventure',
-    destination: 'Tokyo',
-    dates: 'May 5 – May 15, 2026',
-    startDate: '2026-05-05',
-    endDate: '2026-05-15',
-    members: 2,
-    membersList: [
-      { name: 'Shashwat', color: '#f97316' },
-      { name: 'Sarah', color: '#22c55e' },
-    ],
-    image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&q=80',
-  },
-  {
-    id: 3,
-    title: 'Bali Retreat',
-    destination: 'Bali',
-    dates: 'Jun 1 – Jun 10, 2026',
-    startDate: '2026-06-01',
-    endDate: '2026-06-10',
-    members: 5,
-    membersList: [
-      { name: 'Shashwat', color: '#f97316' },
-      { name: 'Sarah', color: '#22c55e' },
-      { name: 'Zara', color: '#3b82f6' },
-      { name: 'Alex', color: '#a78bfa' },
-      { name: 'Mia', color: '#f43f5e' },
-    ],
-    image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400&q=80',
-  },
-];
 
 function TripOverview() {
   const navigate = useNavigate();
@@ -52,9 +19,10 @@ function TripOverview() {
         destination: trip.destination,
         startDate: trip.startDate,
         endDate: trip.endDate,
-        numPeople: trip.members,
-        members: trip.membersList,
+        numPeople: trip.travelers,
+        members: trip.members,
         image: trip.image,
+        planTier: trip.planTier,
       },
     });
   };
@@ -75,14 +43,16 @@ function TripOverview() {
         </div>
 
         <Row className="g-4">
-          {inPlanningTrips.map((trip) => (
+          {sampleTrips.map((trip) => (
             <Col sm={6} lg={4} key={trip.id}>
               <div className="trip-card" onClick={() => handleTripClick(trip)} style={{ cursor: 'pointer' }}>
                 <div
                   className="trip-card-image"
                   style={{ backgroundImage: `url(${trip.image})` }}
                 >
-                  <span className="trip-badge badge-inplanning">In-Planning</span>
+                  <span className={`trip-badge ${trip.status === 'Active' ? 'badge-active' : 'badge-inplanning'}`}>
+                    {trip.status}
+                  </span>
                 </div>
                 <div className="trip-card-body">
                   <h3 className="trip-card-title">{trip.title}</h3>
@@ -90,7 +60,7 @@ function TripOverview() {
                   <div className="trip-card-footer">
                     <span className="trip-members">
                       <Users size={16} />
-                      {trip.members} members
+                      {trip.travelers} {trip.travelers === 1 ? 'traveler' : 'travelers'}
                     </span>
                     <button className="trip-view-btn">View</button>
                   </div>
