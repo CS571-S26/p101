@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import TripOverview from './pages/TripOverview'
 import TripDetails from './pages/TripDetails'
 import Settings from './pages/Settings'
+import About from './pages/About'
 import './App.css'
 
 function App() {
@@ -15,8 +16,9 @@ function App() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/home" element={<Home />} />
       <Route path="/trips" element={<TripOverview />} />
-      <Route path="/trips/new/details" element={<TripDetails />} />
+      <Route path="/trips/details" element={<TripDetails />} />
       <Route path="/settings" element={<Settings />} />
+      <Route path="/about" element={<About />} />
     </Routes>
   )
 }

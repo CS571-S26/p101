@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Stack } from 'react-bootstrap';
 import { Calendar, ChevronRight } from 'lucide-react';
 import PlaceAutocomplete from './PlaceAutocomplete';
 
@@ -21,8 +22,8 @@ function TripSearchCard({ onStartPlan }) {
         />
       </div>
       <p className="search-hint">Planning a multi-stop trip? You can add more destinations later.</p>
-      <div className="search-card-bottom">
-        <div className="search-input-group search-input-date">
+      <Stack direction="horizontal" gap={3} className="search-card-bottom flex-wrap">
+        <div className="search-input-group search-input-date flex-grow-1">
           <Calendar size={18} className="search-input-icon" />
           <input
             type="date"
@@ -36,7 +37,7 @@ function TripSearchCard({ onStartPlan }) {
           Start Planning
           <ChevronRight size={18} />
         </button>
-      </div>
+      </Stack>
     </div>
   );
 }

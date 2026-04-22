@@ -48,7 +48,7 @@ function Login() {
         </Col>
 
         {/* Right Panel - Form */}
-        <Col md={6} xs={12} className="auth-right d-flex flex-column align-items-center justify-content-center p-4">
+        <Col md={6} xs={12} className="auth-right d-flex flex-column align-items-center justify-content-center p-md-4 p-3">
           <h1 className="auth-brand">VOYAGO</h1>
 
           <div className="oauth-buttons mb-3">

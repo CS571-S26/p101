@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { Row, Col } from 'react-bootstrap';
 import { Plus } from 'lucide-react';
 import TripCard from './TripCard';
 
@@ -12,11 +13,13 @@ function TripSection({ title, dotClass, trips, emptyMessage, onTripClick }) {
         {title}
       </h3>
       {trips.length > 0 ? (
-        <div className="trips-grid">
+        <Row className="g-3">
           {trips.map((trip) => (
-            <TripCard key={trip.id} trip={trip} onClick={() => onTripClick(trip)} />
+            <Col sm={6} lg={4} key={trip.id}>
+              <TripCard trip={trip} onClick={() => onTripClick(trip)} />
+            </Col>
           ))}
-        </div>
+        </Row>
       ) : (
         <div className="empty-section">
           <p className="empty-section-text">{emptyMessage}</p>

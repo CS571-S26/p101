@@ -16,7 +16,7 @@ const sampleTrips = [
     endDate: '2026-04-15',
     travelers: 1,
     nights: 7,
-    planTier: 'Voyago Free',
+    planTier: 'Voyago Sample',
     image: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=600&q=80',
     status: 'Active',
     members: [{ name: 'Shashwat', color: '#f97316' }],
@@ -35,7 +35,7 @@ function Home() {
   const [newTripData, setNewTripData] = useState(null);
 
   const handleTripClick = (trip) => {
-    navigate('/trips/new/details', {
+    navigate('/trips/details', {
       state: {
         title: trip.title,
         destination: trip.title.replace('Trip to ', ''),

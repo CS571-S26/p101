@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { Row, Col, Nav } from 'react-bootstrap';
 import {
   Calendar, DollarSign, MapPin, Settings,
   UserPlus, Pencil, ChevronLeft, X, Crown, Mail, Users,
@@ -56,151 +57,156 @@ function TripDetails() {
     <div className="home-v2">
       <TopNavbar />
 
-      <div className="tripdetails-page">
-        <aside className="td-sidebar">
-          <div className="td-sidebar-card">
-            <div className="td-sidebar-image" style={{ backgroundImage: `url(${tripImage})` }}>
-              <button className="td-sidebar-edit-btn" onClick={() => setShowTripInfo(true)}>
-                <Pencil size={14} />
-              </button>
-            </div>
+      <Row className="tripdetails-page g-3">
+        <Col lg={3}>
+          <aside className="td-sidebar">
+            <div className="td-sidebar-card">
+              <div className="td-sidebar-image" style={{ backgroundImage: `url(${tripImage})` }}>
+                <button className="td-sidebar-edit-btn" onClick={() => setShowTripInfo(true)}>
+                  <Pencil size={14} />
+                </button>
+              </div>
 
-            {showTripInfo && (
-              <div className="td-info-overlay" onClick={() => setShowTripInfo(false)}>
-                <div className="td-info-popup" onClick={(e) => e.stopPropagation()}>
-                  <div className="td-info-header">
-                    <h3 className="td-info-title">Trip Details</h3>
-                    <button className="td-info-close" onClick={() => setShowTripInfo(false)}>
-                      <X size={16} />
-                    </button>
-                  </div>
+              {showTripInfo && (
+                <div className="td-info-overlay" onClick={() => setShowTripInfo(false)}>
+                  <div className="td-info-popup" onClick={(e) => e.stopPropagation()}>
+                    <div className="td-info-header">
+                      <h3 className="td-info-title">Trip Details</h3>
+                      <button className="td-info-close" onClick={() => setShowTripInfo(false)}>
+                        <X size={16} />
+                      </button>
+                    </div>
 
-                  <div className="td-info-body">
-                    <div className="td-info-row">
-                      <span className="td-info-label">Trip Name</span>
-                      <span className="td-info-value">{tripTitle}</span>
-                    </div>
-                    <div className="td-info-row">
-                      <span className="td-info-label"><MapPin size={14} /> Destination</span>
-                      <span className="td-info-value">{destination}</span>
-                    </div>
-                    {dateRange && (
+                    <div className="td-info-body">
                       <div className="td-info-row">
-                        <span className="td-info-label"><Calendar size={14} /> Dates</span>
-                        <span className="td-info-value">{dateRange}</span>
+                        <span className="td-info-label">Trip Name</span>
+                        <span className="td-info-value">{tripTitle}</span>
                       </div>
-                    )}
-                    <div className="td-info-row">
-                      <span className="td-info-label"><Users size={14} /> Travelers</span>
-                      <span className="td-info-value">{guestCount} people</span>
-                    </div>
-
-                    <div className="td-info-divider" />
-
-                    <h4 className="td-info-section-title">Members</h4>
-                    <div className="td-info-members">
-                      {members.map((m, i) => (
-                        <div key={i} className="td-info-member">
-                          <span className="td-info-member-avatar" style={{ background: m.color }}>
-                            {m.name.charAt(0).toUpperCase()}
-                          </span>
-                          <div className="td-info-member-details">
-                            <span className="td-info-member-name">
-                              {m.name}
-                              {i === 0 && <span className="td-info-admin-badge"><Crown size={10} /> Admin</span>}
-                            </span>
-                            <span className="td-info-member-email">
-                              <Mail size={11} />
-                              {m.email || `${m.name.toLowerCase().replace(/\s+/g, '')}@email.com`}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    {tripData.inviteEmails && (
-                      <>
-                        <div className="td-info-divider" />
+                      <div className="td-info-row">
+                        <span className="td-info-label"><MapPin size={14} /> Destination</span>
+                        <span className="td-info-value">{destination}</span>
+                      </div>
+                      {dateRange && (
                         <div className="td-info-row">
-                          <span className="td-info-label"><Mail size={14} /> Invited</span>
-                          <span className="td-info-value td-info-value-wrap">{tripData.inviteEmails}</span>
+                          <span className="td-info-label"><Calendar size={14} /> Dates</span>
+                          <span className="td-info-value">{dateRange}</span>
                         </div>
-                      </>
-                    )}
+                      )}
+                      <div className="td-info-row">
+                        <span className="td-info-label"><Users size={14} /> Travelers</span>
+                        <span className="td-info-value">{guestCount} people</span>
+                      </div>
+
+                      <div className="td-info-divider" />
+
+                      <h4 className="td-info-section-title">Members</h4>
+                      <div className="td-info-members">
+                        {members.map((m, i) => (
+                          <div key={i} className="td-info-member">
+                            <span className="td-info-member-avatar" style={{ background: m.color }}>
+                              {m.name.charAt(0).toUpperCase()}
+                            </span>
+                            <div className="td-info-member-details">
+                              <span className="td-info-member-name">
+                                {m.name}
+                                {i === 0 && <span className="td-info-admin-badge"><Crown size={10} /> Admin</span>}
+                              </span>
+                              <span className="td-info-member-email">
+                                <Mail size={11} />
+                                {m.email || `${m.name.toLowerCase().replace(/\s+/g, '')}@email.com`}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {tripData.inviteEmails && (
+                        <>
+                          <div className="td-info-divider" />
+                          <div className="td-info-row">
+                            <span className="td-info-label"><Mail size={14} /> Invited</span>
+                            <span className="td-info-value td-info-value-wrap">{tripData.inviteEmails}</span>
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
+              )}
+
+              <div className="td-sidebar-info">
+                <h3 className="td-sidebar-title">{tripTitle}</h3>
+                {dateRange && (
+                  <p className="td-sidebar-meta">
+                    <Calendar size={14} />
+                    {dateRange}
+                  </p>
+                )}
+                <p className="td-sidebar-meta">
+                  <MapPin size={14} />
+                  {destination}
+                </p>
+
+                <div className="td-sidebar-members">
+                  <AvatarGroup members={members} max={4} size={32} />
+                  <span className="td-sidebar-guest-count">{guestCount} guests</span>
+                </div>
+
+                <button className="td-sidebar-invite">
+                  <UserPlus size={16} />
+                  Invite Guests
+                </button>
+              </div>
+            </div>
+
+            <Nav className="td-sidebar-nav flex-lg-column flex-row">
+              {sidebarNav.map(({ id, label, icon: Icon }) => (
+                <Nav.Item key={id}>
+                  <button
+                    className={`td-sidebar-nav-item ${activeNav === id ? 'active' : ''}`}
+                    onClick={() => setActiveNav(id)}
+                  >
+                    <Icon size={18} />
+                    {label}
+                  </button>
+                </Nav.Item>
+              ))}
+            </Nav>
+          </aside>
+        </Col>
+
+        <Col lg={9}>
+          <div className="td-main">
+            <button className="tripdetails-back" onClick={() => navigate('/trips')}>
+              <ChevronLeft size={18} />
+              Back to Trips
+            </button>
+
+            {activeNav === 'calendar' && (
+              <ItineraryCalendar tripTitle={tripTitle} destination={destination} />
+            )}
+            {activeNav === 'budget' && (
+              <div className="td-placeholder">
+                <DollarSign size={40} />
+                <h3>Budget</h3>
+                <p>Track and manage your trip expenses</p>
               </div>
             )}
-
-            <div className="td-sidebar-info">
-              <h3 className="td-sidebar-title">{tripTitle}</h3>
-              {dateRange && (
-                <p className="td-sidebar-meta">
-                  <Calendar size={14} />
-                  {dateRange}
-                </p>
-              )}
-              <p className="td-sidebar-meta">
-                <MapPin size={14} />
-                {destination}
-              </p>
-
-              <div className="td-sidebar-members">
-                <AvatarGroup members={members} max={4} size={32} />
-                <span className="td-sidebar-guest-count">{guestCount} guests</span>
-              </div>
-
-              <button className="td-sidebar-invite">
-                <UserPlus size={16} />
-                Invite Guests
-              </button>
-            </div>
+            {activeNav === 'map' && (
+              <TripMap destination={destination} />
+            )}
+            {activeNav === 'settings' && (
+              <TripSettings
+                tripData={tripData}
+                onRegenerate={(updated) => {
+                  navigate('/trips/details', { state: updated, replace: true });
+                  setActiveNav('calendar');
+                }}
+              />
+            )}
           </div>
-
-          <nav className="td-sidebar-nav">
-            {sidebarNav.map(({ id, label, icon: Icon }) => (
-              <button
-                key={id}
-                className={`td-sidebar-nav-item ${activeNav === id ? 'active' : ''}`}
-                onClick={() => setActiveNav(id)}
-              >
-                <Icon size={18} />
-                {label}
-              </button>
-            ))}
-          </nav>
-        </aside>
-
-        <div className="td-main">
-          <button className="tripdetails-back" onClick={() => navigate('/home')}>
-            <ChevronLeft size={18} />
-            Back to Home
-          </button>
-
-          {activeNav === 'calendar' && (
-            <ItineraryCalendar tripTitle={tripTitle} destination={destination} />
-          )}
-          {activeNav === 'budget' && (
-            <div className="td-placeholder">
-              <DollarSign size={40} />
-              <h3>Budget</h3>
-              <p>Track and manage your trip expenses</p>
-            </div>
-          )}
-          {activeNav === 'map' && (
-            <TripMap destination={destination} />
-          )}
-          {activeNav === 'settings' && (
-            <TripSettings
-              tripData={tripData}
-              onRegenerate={(updated) => {
-                navigate('/trips/new/details', { state: updated, replace: true });
-                setActiveNav('calendar');
-              }}
-            />
-          )}
-        </div>
-      </div>
+        </Col>
+      </Row>
     </div>
   );
 }

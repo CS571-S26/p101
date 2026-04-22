@@ -422,15 +422,3 @@
   background: none;
 }
 
-/* ── Responsive ── */
-@media (max-width: 768px) {
-  .auth-container {
-    width: 95%;
-    min-height: auto;
-    border-radius: 20px;
-  }
-
-  .auth-right {
-    padding: 2rem 1.5rem !important;
-  }
-}
