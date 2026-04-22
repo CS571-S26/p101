@@ -78,7 +78,7 @@ function NewTripModal({ isOpen, onClose, initialData }) {
       interests: interests.join(', '), notes,
     };
     onClose();
-    navigate('/trips/new/details', { state: tripData });
+    navigate('/trips/details', { state: tripData });
   };
 
   return (

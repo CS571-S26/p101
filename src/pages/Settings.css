@@ -50,19 +50,9 @@
   margin: 4px 0 0;
 }
 
-/* ── Two-Column Layout ── */
-.settings-layout {
-  display: flex;
-  gap: 2rem;
-  align-items: flex-start;
-}
-
 /* ── Settings Sidebar Nav ── */
 .settings-sidebar {
-  width: 240px;
-  flex-shrink: 0;
   display: flex;
-  flex-direction: column;
   gap: 4px;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -70,6 +60,7 @@
   padding: 8px;
   position: sticky;
   top: 80px;
+  overflow-x: auto;
 }
 
 .settings-nav-item {
@@ -122,12 +113,6 @@
   opacity: 1;
   transform: translateX(0);
   color: var(--accent);
-}
-
-/* ── Main Content Area ── */
-.settings-main {
-  flex: 1;
-  min-width: 0;
 }
 
 .settings-section-header {
@@ -303,12 +288,6 @@
 .settings-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-}
-
-.settings-form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
 
@@ -713,12 +692,6 @@
 }
 
 /* ── Theme Preview Cards ── */
-.settings-theme-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
 .settings-theme-option {
   position: relative;
   border: 2px solid var(--card-border);
@@ -729,6 +702,7 @@
   padding: 0;
   transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
   font-family: inherit;
+  width: 100%;
 }
 
 .settings-theme-option:hover {
@@ -880,67 +854,15 @@
   transform: translateX(-50%) translateY(0);
 }
 
-/* ── Responsive ── */
-@media (max-width: 900px) {
-  .settings-layout {
-    flex-direction: column;
-  }
-
-  .settings-sidebar {
-    width: 100%;
-    flex-direction: row;
-    overflow-x: auto;
-    position: static;
-    gap: 2px;
-    padding: 6px;
-    border-radius: 14px;
-  }
-
-  .settings-nav-item {
-    white-space: nowrap;
-    padding: 9px 14px;
-    font-size: 0.84rem;
-    border-radius: 8px;
-  }
-
-  .settings-nav-arrow {
-    display: none;
-  }
-
-  .settings-sidebar::-webkit-scrollbar {
-    height: 4px;
-  }
-
-  .settings-sidebar::-webkit-scrollbar-thumb {
-    background: var(--text-faint);
-    border-radius: 2px;
-  }
+.settings-nav-item {
+  white-space: nowrap;
 }
 
-@media (max-width: 640px) {
-  .settings-page {
-    padding: 1.25rem 4%;
-  }
+.settings-sidebar::-webkit-scrollbar {
+  height: 4px;
+}
 
-  .settings-form-row {
-    grid-template-columns: 1fr;
-  }
-
-  .settings-theme-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .settings-profile-header {
-    flex-wrap: wrap;
-  }
-
-  .settings-edit-btn {
-    width: 100%;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .settings-page-title {
-    font-size: 1.3rem;
-  }
+.settings-sidebar::-webkit-scrollbar-thumb {
+  background: var(--text-faint);
+  border-radius: 2px;
 }

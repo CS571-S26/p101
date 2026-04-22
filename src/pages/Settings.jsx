@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Nav, Stack } from 'react-bootstrap';
 import {
   User, Palette, Bell, Shield, Globe, CreditCard,
   ChevronRight, Check, X, Eye,
@@ -77,58 +78,66 @@ function Settings() {
 
         {editingProfile ? (
           <div className="settings-form">
-            <div className="settings-form-row">
-              <div className="settings-field">
-                <label className="settings-label">Full Name</label>
-                <div className="settings-input-wrap">
-                  <User size={16} className="settings-input-icon" />
-                  <input
-                    className="settings-input"
-                    value={profileDraft.name}
-                    onChange={(e) => setProfileDraft({ ...profileDraft, name: e.target.value })}
-                  />
+            <Row className="g-3">
+              <Col md={6}>
+                <div className="settings-field">
+                  <label className="settings-label">Full Name</label>
+                  <div className="settings-input-wrap">
+                    <User size={16} className="settings-input-icon" />
+                    <input
+                      className="settings-input"
+                      value={profileDraft.name}
+                      onChange={(e) => setProfileDraft({ ...profileDraft, name: e.target.value })}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="settings-field">
-                <label className="settings-label">Email</label>
-                <div className="settings-input-wrap">
-                  <Mail size={16} className="settings-input-icon" />
-                  <input
-                    className="settings-input"
-                    type="email"
-                    value={profileDraft.email}
-                    onChange={(e) => setProfileDraft({ ...profileDraft, email: e.target.value })}
-                  />
+              </Col>
+              <Col md={6}>
+                <div className="settings-field">
+                  <label className="settings-label">Email</label>
+                  <div className="settings-input-wrap">
+                    <Mail size={16} className="settings-input-icon" />
+                    <input
+                      className="settings-input"
+                      type="email"
+                      value={profileDraft.email}
+                      onChange={(e) => setProfileDraft({ ...profileDraft, email: e.target.value })}
+                    />
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div className="settings-form-row">
-              <div className="settings-field">
-                <label className="settings-label">Phone</label>
-                <div className="settings-input-wrap">
-                  <Phone size={16} className="settings-input-icon" />
-                  <input
-                    className="settings-input"
-                    type="tel"
-                    placeholder="+1 (555) 000-0000"
-                    value={profileDraft.phone}
-                    onChange={(e) => setProfileDraft({ ...profileDraft, phone: e.target.value })}
-                  />
+              </Col>
+            </Row>
+            <Row className="g-3 mt-1">
+              <Col md={6}>
+                <div className="settings-field">
+                  <label className="settings-label">Phone</label>
+                  <div className="settings-input-wrap">
+                    <Phone size={16} className="settings-input-icon" />
+                    <input
+                      className="settings-input"
+                      type="tel"
+                      placeholder="+1 (555) 000-0000"
+                      value={profileDraft.phone}
+                      onChange={(e) => setProfileDraft({ ...profileDraft, phone: e.target.value })}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="settings-field">
-                <label className="settings-label">Bio</label>
-                <div className="settings-input-wrap">
-                  <textarea
-                    className="settings-textarea"
-                    rows={3}
-                    placeholder="Tell us about yourself..."
-                    value={profileDraft.bio}
-                    onChange={(e) => setProfileDraft({ ...profileDraft, bio: e.target.value })}
-                  />
+              </Col>
+              <Col md={6}>
+                <div className="settings-field">
+                  <label className="settings-label">Bio</label>
+                  <div className="settings-input-wrap">
+                    <textarea
+                      className="settings-textarea"
+                      rows={3}
+                      placeholder="Tell us about yourself..."
+                      value={profileDraft.bio}
+                      onChange={(e) => setProfileDraft({ ...profileDraft, bio: e.target.value })}
+                    />
+                  </div>
                 </div>
-              </div>
-            </div>
+              </Col>
+            </Row>
             <div className="settings-form-actions">
               <button className="settings-btn-primary" onClick={handleProfileSave}>
                 <Check size={16} /> Save Changes
@@ -166,36 +175,40 @@ function Settings() {
       <div className="settings-card">
         <h4 className="settings-card-title">Theme</h4>
         <p className="settings-card-desc">Choose your preferred color scheme for the interface.</p>
-        <div className="settings-theme-grid">
-          <button
-            className={`settings-theme-option ${theme === 'light' ? 'settings-theme-active' : ''}`}
-            onClick={() => setTheme('light')}
-          >
-            <div className="settings-theme-preview settings-theme-preview-light">
-              <div className="stp-navbar" />
-              <div className="stp-content">
-                <div className="stp-card" />
-                <div className="stp-card" />
+        <Row className="g-3">
+          <Col sm={6}>
+            <button
+              className={`settings-theme-option ${theme === 'light' ? 'settings-theme-active' : ''}`}
+              onClick={() => setTheme('light')}
+            >
+              <div className="settings-theme-preview settings-theme-preview-light">
+                <div className="stp-navbar" />
+                <div className="stp-content">
+                  <div className="stp-card" />
+                  <div className="stp-card" />
+                </div>
               </div>
-            </div>
-            <span className="settings-theme-label">Light</span>
-            {theme === 'light' && <Check size={16} className="settings-theme-check" />}
-          </button>
-          <button
-            className={`settings-theme-option ${theme === 'blue' ? 'settings-theme-active' : ''}`}
-            onClick={() => setTheme('blue')}
-          >
-            <div className="settings-theme-preview settings-theme-preview-blue">
-              <div className="stp-navbar" />
-              <div className="stp-content">
-                <div className="stp-card" />
-                <div className="stp-card" />
+              <span className="settings-theme-label">Light</span>
+              {theme === 'light' && <Check size={16} className="settings-theme-check" />}
+            </button>
+          </Col>
+          <Col sm={6}>
+            <button
+              className={`settings-theme-option ${theme === 'blue' ? 'settings-theme-active' : ''}`}
+              onClick={() => setTheme('blue')}
+            >
+              <div className="settings-theme-preview settings-theme-preview-blue">
+                <div className="stp-navbar" />
+                <div className="stp-content">
+                  <div className="stp-card" />
+                  <div className="stp-card" />
+                </div>
               </div>
-            </div>
-            <span className="settings-theme-label">Blue (Dark)</span>
-            {theme === 'blue' && <Check size={16} className="settings-theme-check" />}
-          </button>
-        </div>
+              <span className="settings-theme-label">Blue (Dark)</span>
+              {theme === 'blue' && <Check size={16} className="settings-theme-check" />}
+            </button>
+          </Col>
+        </Row>
       </div>
     </div>
   );
@@ -359,67 +372,75 @@ function Settings() {
         <h4 className="settings-card-title">Regional Settings</h4>
         <p className="settings-card-desc">Customize your locale preferences for a personalized experience.</p>
         <div className="settings-form">
-          <div className="settings-form-row">
-            <div className="settings-field">
-              <label className="settings-label">Language</label>
-              <select
-                className="settings-select"
-                value={settings.language}
-                onChange={(e) => { updateSettings({ language: e.target.value }); showSaved(); }}
-              >
-                <option value="en">English</option>
-                <option value="es">Español</option>
-                <option value="fr">Français</option>
-                <option value="de">Deutsch</option>
-                <option value="hi">Hindi</option>
-                <option value="ja">Japanese</option>
-              </select>
-            </div>
-            <div className="settings-field">
-              <label className="settings-label">Currency</label>
-              <select
-                className="settings-select"
-                value={settings.currency}
-                onChange={(e) => { updateSettings({ currency: e.target.value }); showSaved(); }}
-              >
-                <option value="USD">USD ($)</option>
-                <option value="EUR">EUR (€)</option>
-                <option value="GBP">GBP (£)</option>
-                <option value="INR">INR (₹)</option>
-                <option value="JPY">JPY (¥)</option>
-              </select>
-            </div>
-          </div>
-          <div className="settings-form-row">
-            <div className="settings-field">
-              <label className="settings-label">Date Format</label>
-              <select
-                className="settings-select"
-                value={settings.dateFormat}
-                onChange={(e) => { updateSettings({ dateFormat: e.target.value }); showSaved(); }}
-              >
-                <option value="MM/DD/YYYY">MM/DD/YYYY</option>
-                <option value="DD/MM/YYYY">DD/MM/YYYY</option>
-                <option value="YYYY-MM-DD">YYYY-MM-DD</option>
-              </select>
-            </div>
-            <div className="settings-field">
-              <label className="settings-label">Timezone</label>
-              <select
-                className="settings-select"
-                value={settings.timezone}
-                onChange={(e) => { updateSettings({ timezone: e.target.value }); showSaved(); }}
-              >
-                {['America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles',
-                  'Europe/London', 'Europe/Paris', 'Europe/Berlin',
-                  'Asia/Kolkata', 'Asia/Tokyo', 'Asia/Shanghai',
-                  'Australia/Sydney', 'Pacific/Auckland',
-                ].map((tz) => (
-                  <option key={tz} value={tz}>{tz.replace(/_/g, ' ')}</option>
-                ))}
-              </select>
-            </div>
-          </div>
+          <Row className="g-3">
+            <Col md={6}>
+              <div className="settings-field">
+                <label className="settings-label">Language</label>
+                <select
+                  className="settings-select"
+                  value={settings.language}
+                  onChange={(e) => { updateSettings({ language: e.target.value }); showSaved(); }}
+                >
+                  <option value="en">English</option>
+                  <option value="es">Español</option>
+                  <option value="fr">Français</option>
+                  <option value="de">Deutsch</option>
+                  <option value="hi">Hindi</option>
+                  <option value="ja">Japanese</option>
+                </select>
+              </div>
+            </Col>
+            <Col md={6}>
+              <div className="settings-field">
+                <label className="settings-label">Currency</label>
+                <select
+                  className="settings-select"
+                  value={settings.currency}
+                  onChange={(e) => { updateSettings({ currency: e.target.value }); showSaved(); }}
+                >
+                  <option value="USD">USD ($)</option>
+                  <option value="EUR">EUR (€)</option>
+                  <option value="GBP">GBP (£)</option>
+                  <option value="INR">INR (₹)</option>
+                  <option value="JPY">JPY (¥)</option>
+                </select>
+              </div>
+            </Col>
+          </Row>
+          <Row className="g-3 mt-1">
+            <Col md={6}>
+              <div className="settings-field">
+                <label className="settings-label">Date Format</label>
+                <select
+                  className="settings-select"
+                  value={settings.dateFormat}
+                  onChange={(e) => { updateSettings({ dateFormat: e.target.value }); showSaved(); }}
+                >
+                  <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                  <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                  <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                </select>
+              </div>
+            </Col>
+            <Col md={6}>
+              <div className="settings-field">
+                <label className="settings-label">Timezone</label>
+                <select
+                  className="settings-select"
+                  value={settings.timezone}
+                  onChange={(e) => { updateSettings({ timezone: e.target.value }); showSaved(); }}
+                >
+                  {['America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles',
+                    'Europe/London', 'Europe/Paris', 'Europe/Berlin',
+                    'Asia/Kolkata', 'Asia/Tokyo', 'Asia/Shanghai',
+                    'Australia/Sydney', 'Pacific/Auckland',
+                  ].map((tz) => (
+                    <option key={tz} value={tz}>{tz.replace(/_/g, ' ')}</option>
+                  ))}
+                </select>
+              </div>
+            </Col>
+          </Row>
         </div>
       </div>
     </div>
@@ -488,8 +509,8 @@ function Settings() {
   return (
     <div className="home-v2">
       <TopNavbar />
-      <div className="settings-page">
-        <div className="settings-header">
+      <Container className="settings-page">
+        <Stack direction="horizontal" gap={3} className="settings-header">
           <button className="settings-back-btn" onClick={() => navigate('/home')}>
             <ArrowLeft size={18} />
           </button>
@@ -497,35 +518,38 @@ function Settings() {
             <h1 className="settings-page-title">Settings</h1>
             <p className="settings-page-subtitle">Manage your account preferences and configuration</p>
           </div>
-        </div>
+        </Stack>
 
-        <div className="settings-layout">
-          <nav className="settings-sidebar">
-            {SECTIONS.map((sec) => {
-              const Icon = sec.icon;
-              return (
-                <button
-                  key={sec.id}
-                  className={`settings-nav-item ${activeSection === sec.id ? 'settings-nav-active' : ''}`}
-                  onClick={() => setActiveSection(sec.id)}
-                >
-                  <Icon size={18} />
-                  <span>{sec.label}</span>
-                  <ChevronRight size={14} className="settings-nav-arrow" />
-                </button>
-              );
-            })}
-          </nav>
+        <Row className="g-4">
+          <Col md={3}>
+            <Nav className="settings-sidebar flex-md-column flex-row" as="nav">
+              {SECTIONS.map((sec) => {
+                const Icon = sec.icon;
+                return (
+                  <Nav.Item key={sec.id} className="w-100">
+                    <button
+                      className={`settings-nav-item ${activeSection === sec.id ? 'settings-nav-active' : ''}`}
+                      onClick={() => setActiveSection(sec.id)}
+                    >
+                      <Icon size={18} />
+                      <span>{sec.label}</span>
+                      <ChevronRight size={14} className="settings-nav-arrow d-none d-md-inline" />
+                    </button>
+                  </Nav.Item>
+                );
+              })}
+            </Nav>
+          </Col>
 
-          <main className="settings-main">
+          <Col md={9}>
             <div className="settings-section-header">
               {activeConfig && <activeConfig.icon size={22} className="settings-section-icon" />}
               <h2 className="settings-section-title">{activeConfig?.label}</h2>
             </div>
             {sectionRenderers[activeSection]?.()}
-          </main>
-        </div>
-      </div>
+          </Col>
+        </Row>
+      </Container>
 
       <div className={`settings-toast ${saved ? 'settings-toast-show' : ''}`}>
         <Check size={16} /> Changes saved

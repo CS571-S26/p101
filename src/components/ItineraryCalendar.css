@@ -663,9 +663,6 @@
 
 /* ── When Section ── */
 .cal-modal-when-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
   flex-wrap: wrap;
 }
 
@@ -914,21 +911,12 @@
 
 /* ── Modal Footer ── */
 .cal-modal-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 1rem 1.5rem;
   border-top: 1px solid var(--card-border);
   gap: 8px;
   flex-shrink: 0;
 }
 
-.cal-modal-footer-left,
-.cal-modal-footer-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
 
 .cal-modal-footer-btn {
   display: flex;
@@ -981,7 +969,7 @@
   box-shadow: 0 4px 12px rgba(22, 101, 52, 0.25);
 }
 
-/* ── Responsive ── */
+/* ── Responsive (calendar-specific visual tweaks, layout handled by Bootstrap) ── */
 @media (max-width: 768px) {
   .cal-header {
     flex-direction: column;
@@ -1017,30 +1005,6 @@
 
   .cal-drawer {
     width: 100vw;
-  }
-
-  .cal-modal-when-row {
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .cal-modal-when-field {
-    width: 100%;
-  }
-
-  .cal-modal-when-arrow {
-    transform: rotate(90deg);
-  }
-
-  .cal-modal-footer {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .cal-modal-footer-left,
-  .cal-modal-footer-right {
-    width: 100%;
-    justify-content: center;
   }
 }
 

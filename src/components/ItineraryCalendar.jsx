@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { Row, Col, Stack } from 'react-bootstrap';
 import {
   ChevronLeft, ChevronRight, CalendarDays, LayoutGrid,
   MapPin, Clock, X, Navigation, StickyNote, Tag,
@@ -442,25 +443,35 @@ function EventDetailPanel({ event, onClose, currentDate, destination }) {
                   <CalendarDays size={16} className="cal-modal-section-icon" style={{ color: '#f97316' }} />
                   When
                 </h4>
-                <div className="cal-modal-when-row">
-                  <div className="cal-modal-when-field">
-                    <input className="cal-modal-input" value={startDT} readOnly />
-                  </div>
-                  <div className="cal-modal-when-field">
-                    <select className="cal-modal-select" value={timezone} readOnly>
-                      <option>{timezone}</option>
-                    </select>
-                  </div>
-                  <span className="cal-modal-when-arrow"><ArrowRight size={16} /></span>
-                  <div className="cal-modal-when-field">
-                    <input className="cal-modal-input" value={endDT} readOnly />
-                  </div>
-                  <div className="cal-modal-when-field">
-                    <select className="cal-modal-select" value={timezone} readOnly>
-                      <option>{timezone}</option>
-                    </select>
-                  </div>
-                </div>
+                <Row className="g-2 align-items-center cal-modal-when-row">
+                  <Col sm={5}>
+                    <Row className="g-2">
+                      <Col xs={7}>
+                        <input className="cal-modal-input w-100" value={startDT} readOnly />
+                      </Col>
+                      <Col xs={5}>
+                        <select className="cal-modal-select w-100" value={timezone} readOnly>
+                          <option>{timezone}</option>
+                        </select>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col sm={2} className="text-center">
+                    <span className="cal-modal-when-arrow"><ArrowRight size={16} /></span>
+                  </Col>
+                  <Col sm={5}>
+                    <Row className="g-2">
+                      <Col xs={7}>
+                        <input className="cal-modal-input w-100" value={endDT} readOnly />
+                      </Col>
+                      <Col xs={5}>
+                        <select className="cal-modal-select w-100" value={timezone} readOnly>
+                          <option>{timezone}</option>
+                        </select>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
                 <label className="cal-modal-toggle-row">
                   <button
                     className={`cal-modal-toggle ${allDay ? 'on' : ''}`}
@@ -529,22 +540,22 @@ function EventDetailPanel({ event, onClose, currentDate, destination }) {
               </div>
             </div>
 
-            <div className="cal-modal-footer">
-              <div className="cal-modal-footer-left">
+            <Stack direction="horizontal" gap={2} className="cal-modal-footer flex-wrap justify-content-between">
+              <Stack direction="horizontal" gap={2}>
                 <button className="cal-modal-footer-btn cal-modal-delete-btn">
                   <Trash2 size={15} /> Delete
                 </button>
                 <button className="cal-modal-footer-btn cal-modal-dup-btn">
                   <Copy size={15} /> Duplicate
                 </button>
-              </div>
-              <div className="cal-modal-footer-right">
+              </Stack>
+              <Stack direction="horizontal" gap={2}>
                 <button className="cal-modal-footer-btn cal-modal-cancel-btn" onClick={handleClose}>Cancel</button>
                 <button className="cal-modal-footer-btn cal-modal-save-btn" onClick={handleClose}>
                   <Save size={15} /> Save Event
                 </button>
-              </div>
-            </div>
+              </Stack>
+            </Stack>
           </>
         ) : (
           <ChatBotTab destination={destination} />

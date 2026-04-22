@@ -1,4 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
+import { Nav } from 'react-bootstrap';
 import { useTheme } from '../context/ThemeContext';
 import { Home, PlusCircle, Calendar, Users, Moon, Sun, LogOut, Menu } from 'lucide-react';
 
@@ -17,32 +18,38 @@ function Sidebar() {
         {sidebarOpen && <h1 className="sidebar-brand">VOYAGO</h1>}
       </div>
 
-      <nav className="sidebar-nav">
-        <button
-          className={`sidebar-item ${path === '/home' ? 'active' : ''}`}
-          onClick={() => navigate('/home')}
-          title="Home"
-        >
-          <Home size={20} />
-          {sidebarOpen && <span>Home</span>}
-        </button>
-        <button
-          className={`sidebar-item ${path.startsWith('/trips') ? 'active' : ''}`}
-          onClick={() => navigate('/trips')}
-          title="New Trip"
-        >
-          <PlusCircle size={20} />
-          {sidebarOpen && <span>New Trip</span>}
-        </button>
-        <button
-          className="sidebar-item"
-          onClick={() => navigate('/home')}
-          title="Active Trips"
-        >
-          <Calendar size={20} />
-          {sidebarOpen && <span>Active Trips</span>}
-        </button>
-      </nav>
+      <Nav className="sidebar-nav flex-column">
+        <Nav.Item>
+          <button
+            className={`sidebar-item ${path === '/home' ? 'active' : ''}`}
+            onClick={() => navigate('/home')}
+            title="Home"
+          >
+            <Home size={20} />
+            {sidebarOpen && <span>Home</span>}
+          </button>
+        </Nav.Item>
+        <Nav.Item>
+          <button
+            className={`sidebar-item ${path.startsWith('/trips') ? 'active' : ''}`}
+            onClick={() => navigate('/trips')}
+            title="New Trip"
+          >
+            <PlusCircle size={20} />
+            {sidebarOpen && <span>New Trip</span>}
+          </button>
+        </Nav.Item>
+        <Nav.Item>
+          <button
+            className="sidebar-item"
+            onClick={() => navigate('/home')}
+            title="Active Trips"
+          >
+            <Calendar size={20} />
+            {sidebarOpen && <span>Active Trips</span>}
+          </button>
+        </Nav.Item>
+      </Nav>
 
       <div className="sidebar-bottom">
         <button className="sidebar-item sidebar-theme-btn" onClick={toggleTheme} title="Toggle theme">
