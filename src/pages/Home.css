@@ -1067,7 +1067,6 @@
 /* ── Responsive (visual tweaks only, layout handled by Bootstrap) ── */
 @media (max-width: 768px) {
   .top-navbar { padding: 0 1rem; }
-  .navbar-center { display: none; }
   .hero-heading { font-size: 2.2rem; }
   .hero-subtitle { font-size: 0.9rem; }
   .search-card { padding: 1rem 1.25rem; }

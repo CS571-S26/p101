@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
+import { Container, Nav } from 'react-bootstrap';
 import { ChevronDown, Settings, Sun, Moon, LogOut, Home, Map, Info } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
@@ -23,18 +23,19 @@ function TopNavbar() {
           <span className="navbar-logo-box">VOYAGO</span>
         </div>
 
-        <div className="navbar-center">
+        <Nav className="navbar-center flex-row">
           {NAV_ITEMS.map(({ path, label, icon: Icon }) => (
-            <button
-              key={path}
-              className={`navbar-tab ${location.pathname === path || (path === '/home' && location.pathname.startsWith('/home')) || (path === '/trips' && location.pathname.startsWith('/trips')) ? 'navbar-tab-active' : ''}`}
-              onClick={() => navigate(path)}
-            >
-              <Icon size={16} />
-              {label}
-            </button>
+            <Nav.Item key={path}>
+              <button
+                className={`navbar-tab ${location.pathname === path || (path === '/home' && location.pathname.startsWith('/home')) || (path === '/trips' && location.pathname.startsWith('/trips')) ? 'navbar-tab-active' : ''}`}
+                onClick={() => navigate(path)}
+              >
+                <Icon size={16} />
+                <span className="d-none d-sm-inline">{label}</span>
+              </button>
+            </Nav.Item>
           ))}
-        </div>
+        </Nav>
 
         <div className="navbar-right">
           <div className="navbar-user" onClick={() => setDropdownOpen(!dropdownOpen)}>
