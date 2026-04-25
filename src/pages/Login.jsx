@@ -22,11 +22,11 @@ function Login() {
 
 
   const handleGoogleLogin = () => {
-    alert('Google OAuth login - connect backend later');
+    window.location.href= "http://localhost:8080/oauth2/authorization/google";
   };
 
   const handleGithubLogin = () => {
-    alert('GitHub OAuth login - connect backend later');
+    window.location.href = 'http://localhost:8080/oauth2/authorization/github';
   };
 
   return (
