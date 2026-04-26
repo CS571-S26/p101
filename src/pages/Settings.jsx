@@ -14,8 +14,6 @@ import './Settings.css';
 const SECTIONS = [
   { id: 'profile', label: 'Profile', icon: User },
   { id: 'appearance', label: 'Appearance', icon: Palette },
-  { id: 'notifications', label: 'Notifications', icon: Bell },
-  { id: 'privacy', label: 'Privacy & Security', icon: Shield },
   { id: 'preferences', label: 'Preferences', icon: Globe },
   { id: 'account', label: 'Account', icon: CreditCard },
 ];
@@ -212,160 +210,6 @@ function Settings() {
       </div>
     </div>
   );
-
-  const renderNotifications = () => (
-    <div className="settings-section-content">
-      <div className="settings-card">
-        <h4 className="settings-card-title">Email Notifications</h4>
-        <p className="settings-card-desc">Manage which emails you receive from Voyago.</p>
-        <div className="settings-toggle-list">
-          <div className="settings-toggle-row">
-            <div className="settings-toggle-info">
-              <span className="settings-toggle-label">Trip Reminders</span>
-              <span className="settings-toggle-desc">Get reminders about upcoming trips</span>
-            </div>
-            <ToggleSwitch
-              checked={settings.tripReminders}
-              onChange={(v) => { updateSettings({ tripReminders: v }); showSaved(); }}
-            />
-          </div>
-          <div className="settings-toggle-row">
-            <div className="settings-toggle-info">
-              <span className="settings-toggle-label">Group Updates</span>
-              <span className="settings-toggle-desc">Notifications when group members make changes</span>
-            </div>
-            <ToggleSwitch
-              checked={settings.groupUpdates}
-              onChange={(v) => { updateSettings({ groupUpdates: v }); showSaved(); }}
-            />
-          </div>
-          <div className="settings-toggle-row">
-            <div className="settings-toggle-info">
-              <span className="settings-toggle-label">Marketing Emails</span>
-              <span className="settings-toggle-desc">Receive travel deals and promotional content</span>
-            </div>
-            <ToggleSwitch
-              checked={settings.marketingEmails}
-              onChange={(v) => { updateSettings({ marketingEmails: v }); showSaved(); }}
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="settings-card">
-        <h4 className="settings-card-title">Push Notifications</h4>
-        <p className="settings-card-desc">Control notifications on your device.</p>
-        <div className="settings-toggle-list">
-          <div className="settings-toggle-row">
-            <div className="settings-toggle-info">
-              <span className="settings-toggle-label">Push Notifications</span>
-              <span className="settings-toggle-desc">Receive real-time notifications on your device</span>
-            </div>
-            <ToggleSwitch
-              checked={settings.pushNotifications}
-              onChange={(v) => { updateSettings({ pushNotifications: v }); showSaved(); }}
-            />
-          </div>
-          <div className="settings-toggle-row">
-            <div className="settings-toggle-info">
-              <span className="settings-toggle-label">Email Notifications</span>
-              <span className="settings-toggle-desc">Receive activity summaries via email</span>
-            </div>
-            <ToggleSwitch
-              checked={settings.emailNotifications}
-              onChange={(v) => { updateSettings({ emailNotifications: v }); showSaved(); }}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderPrivacy = () => (
-    <div className="settings-section-content">
-      <div className="settings-card">
-        <h4 className="settings-card-title">Profile Visibility</h4>
-        <p className="settings-card-desc">Control who can see your profile information.</p>
-        <div className="settings-radio-group">
-          {[
-            { value: 'public', label: 'Public', desc: 'Anyone on Voyago can see your profile' },
-            { value: 'friends', label: 'Friends Only', desc: 'Only people in your groups can see your profile' },
-            { value: 'private', label: 'Private', desc: 'Only you can see your profile details' },
-          ].map((opt) => (
-            <label
-              key={opt.value}
-              className={`settings-radio-option ${settings.profileVisibility === opt.value ? 'settings-radio-active' : ''}`}
-            >
-              <input
-                type="radio"
-                name="visibility"
-                value={opt.value}
-                checked={settings.profileVisibility === opt.value}
-                onChange={() => { updateSettings({ profileVisibility: opt.value }); showSaved(); }}
-                className="settings-radio-input"
-              />
-              <div className="settings-radio-dot" />
-              <div>
-                <span className="settings-radio-label">{opt.label}</span>
-                <span className="settings-radio-desc">{opt.desc}</span>
-              </div>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <div className="settings-card">
-        <h4 className="settings-card-title">Security</h4>
-        <p className="settings-card-desc">Manage your account security settings.</p>
-        <div className="settings-toggle-list">
-          <div className="settings-toggle-row">
-            <div className="settings-toggle-info">
-              <Lock size={16} className="settings-toggle-icon" />
-              <div>
-                <span className="settings-toggle-label">Two-Factor Authentication</span>
-                <span className="settings-toggle-desc">Add an extra layer of security to your account</span>
-              </div>
-            </div>
-            <ToggleSwitch
-              checked={settings.twoFactorEnabled}
-              onChange={(v) => { updateSettings({ twoFactorEnabled: v }); showSaved(); }}
-            />
-          </div>
-          <div className="settings-toggle-row">
-            <div className="settings-toggle-info">
-              <Eye size={16} className="settings-toggle-icon" />
-              <div>
-                <span className="settings-toggle-label">Show Email on Profile</span>
-                <span className="settings-toggle-desc">Let other users see your email address</span>
-              </div>
-            </div>
-            <ToggleSwitch
-              checked={settings.showEmail}
-              onChange={(v) => { updateSettings({ showEmail: v }); showSaved(); }}
-            />
-          </div>
-          <div className="settings-toggle-row">
-            <div className="settings-toggle-info">
-              <Smartphone size={16} className="settings-toggle-icon" />
-              <div>
-                <span className="settings-toggle-label">Show Trips Publicly</span>
-                <span className="settings-toggle-desc">Allow others to see your trip history</span>
-              </div>
-            </div>
-            <ToggleSwitch
-              checked={settings.showTrips}
-              onChange={(v) => { updateSettings({ showTrips: v }); showSaved(); }}
-            />
-          </div>
-        </div>
-        <button className="settings-link-btn" style={{ marginTop: '1rem' }}>
-          <Lock size={16} /> Change Password
-          <ChevronRight size={16} className="settings-link-arrow" />
-        </button>
-      </div>
-    </div>
-  );
-
   const renderPreferences = () => (
     <div className="settings-section-content">
       <div className="settings-card">
@@ -498,8 +342,6 @@ function Settings() {
   const sectionRenderers = {
     profile: renderProfile,
     appearance: renderAppearance,
-    notifications: renderNotifications,
-    privacy: renderPrivacy,
     preferences: renderPreferences,
     account: renderAccount,
   };
