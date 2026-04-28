@@ -59,10 +59,26 @@ function NewTripModal({ isOpen, onClose, initialData }) {
     });
   };
 
-  const handleStep1Next = (e) => {
+const handleStep1Next = async (e) => {
     e.preventDefault();
-    setStep(2);
-  };
+    try {
+        const res = await fetch('http://localhost:8080/api/trips', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ title, destination, startDate, endDate, numTravelers: numPeople })
+        });
+        if (!res.ok) {
+            const err = await res.json();
+            alert(err.error || 'Failed to create trip');
+            return;  
+        }
+        setStep(2);   
+    } catch (e) {
+        alert('Could not reach the server'+ e.message);
+    }
+};
+
 
   const handleGenerate = (e) => {
     e.preventDefault();
