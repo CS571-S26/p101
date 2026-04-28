@@ -6,6 +6,7 @@ import TripOverview from './pages/TripOverview'
 import TripDetails from './pages/TripDetails'
 import Settings from './pages/Settings'
 import About from './pages/About'
+import PrivateRoute from './components/PrivateRoute'
 import './App.css'
 
 function App() {
@@ -14,11 +15,12 @@ function App() {
       <Route path="/" element={<Navigate to="/login" />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/trips" element={<TripOverview />} />
-      <Route path="/trips/details" element={<TripDetails />} />
-      <Route path="/settings" element={<Settings />} />
-      <Route path="/about" element={<About />} />
+
+      <Route path="/home"          element={<PrivateRoute><Home /></PrivateRoute>} />
+      <Route path="/trips"         element={<PrivateRoute><TripOverview /></PrivateRoute>} />
+      <Route path="/trips/details" element={<PrivateRoute><TripDetails /></PrivateRoute>} />
+      <Route path="/settings"      element={<PrivateRoute><Settings /></PrivateRoute>} />
+      <Route path="/about"         element={<PrivateRoute><About /></PrivateRoute>} />
     </Routes>
   )
 }
