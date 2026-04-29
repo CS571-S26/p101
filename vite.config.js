@@ -8,4 +8,9 @@ export default defineConfig({
   build: {
     outDir: 'docs',
   },
+  server: {
+    proxy: {
+      '/api': 'http://localhost:8000',
+    },
+  },
 })

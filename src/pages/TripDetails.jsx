@@ -10,6 +10,7 @@ import AvatarGroup from '../components/AvatarGroup';
 import ItineraryCalendar from '../components/ItineraryCalendar';
 import TripMap from '../components/TripMap';
 import TripSettings from '../components/TripSettings';
+import BudgetTracker from '../components/BudgetTracker';
 import './Home.css';
 import './NewTrip.css';
 
@@ -186,11 +187,12 @@ function TripDetails() {
               <ItineraryCalendar tripTitle={tripTitle} destination={destination} />
             )}
             {activeNav === 'budget' && (
-              <div className="td-placeholder">
-                <DollarSign size={40} />
-                <h3>Budget</h3>
-                <p>Track and manage your trip expenses</p>
-              </div>
+              <BudgetTracker
+                members={members}
+                tripId={String(tripData.id || tripTitle)}
+                totalBudget={tripData.budget || 5000}
+                budgetCurrency="USD"
+              />
             )}
             {activeNav === 'map' && (
               <TripMap destination={destination} />
