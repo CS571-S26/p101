@@ -387,6 +387,27 @@
   margin-bottom: 1rem;
 }
 
+.newtrip-generating-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.newtrip-generating-bar .loading-spinner {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+  margin: 0;
+  flex-shrink: 0;
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
@@ -1253,8 +1274,167 @@
   opacity: 0.6;
 }
 
+.spin {
+  animation: spin 0.8s linear infinite;
+}
+
 .td-sidebar-nav-item {
   white-space: nowrap;
+}
+
+/* ── Delete — TripDetails topbar ── */
+.td-main-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.td-delete-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.td-delete-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid #f43f5e55;
+  color: #f43f5e;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.td-delete-btn:hover { background: #f43f5e18; }
+
+.td-delete-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.td-delete-confirm-btn {
+  background: #f43f5e;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 5px 12px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+.td-delete-confirm-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.td-delete-cancel-btn {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--text-muted);
+  border-radius: 7px;
+  padding: 5px 12px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+/* ── Delete — TripOverview card ── */
+.trip-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.trip-delete-btn {
+  background: transparent;
+  border: 1px solid #f43f5e55;
+  color: #f43f5e;
+  border-radius: 6px;
+  padding: 4px 7px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background 0.15s;
+}
+.trip-delete-btn:hover { background: #f43f5e18; }
+
+.trip-delete-confirm-btn {
+  background: #f43f5e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.trip-delete-cancel-btn {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+/* ── Delete — AdventureTripCard overlay ── */
+.adventure-card-delete-wrap {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.adventure-card-delete-btn {
+  background: rgba(0,0,0,0.45);
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  padding: 5px 7px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.adventure-card:hover .adventure-card-delete-btn { opacity: 1; }
+
+.adventure-card-confirm {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0,0,0,0.7);
+  border-radius: 8px;
+  padding: 5px 8px;
+}
+
+.adventure-card-confirm span {
+  color: #fff;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.adventure-card-confirm-yes {
+  background: #f43f5e;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 3px 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.adventure-card-confirm-no {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 3px 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
 }
 
 /* ── Responsive ── */

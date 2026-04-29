@@ -39,7 +39,7 @@ function TopNavbar() {
 
         <div className="navbar-right">
           <div className="navbar-user" onClick={() => setDropdownOpen(!dropdownOpen)}>
-            <span className="navbar-avatar">{user.initials}</span>
+            <span className="navbar-avatar">{user ? user.initials : '…'}</span>
             <ChevronDown size={14} />
           </div>
 
@@ -48,8 +48,8 @@ function TopNavbar() {
               <div className="navbar-dropdown-overlay" onClick={() => setDropdownOpen(false)} />
               <div className="navbar-dropdown">
                 <div className="navbar-dropdown-header">
-                  <span className="navbar-dropdown-name">{user.name}</span>
-                  <span className="navbar-dropdown-email">{user.email}</span>
+                  <span className="navbar-dropdown-name">{user?.name || ''}</span>
+                  <span className="navbar-dropdown-email">{user?.email || ''}</span>
                 </div>
                 <button className="navbar-dropdown-item" onClick={() => { toggleTheme(); setDropdownOpen(false); }}>
                   {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
@@ -61,7 +61,11 @@ function TopNavbar() {
                 </button>
                 <button
                   className="navbar-dropdown-item navbar-dropdown-logout"
-                  onClick={() => { navigate('/login'); setDropdownOpen(false); }}
+                  onClick={async () => {
+                    setDropdownOpen(false);
+                    await fetch('http://localhost:8080/api/auth/logout', { method: 'POST', credentials: 'include' });
+                    navigate('/login');
+                  }}
                 >
                   <LogOut size={16} />
                   Log Out

@@ -1,18 +1,37 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const ThemeContext = createContext();
+
+function toInitials(name) {
+  if (!name) return '?';
+  const parts = name.trim().split(/\s+/);
+  return parts.length >= 2
+    ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+    : parts[0].slice(0, 2).toUpperCase();
+}
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState('light');
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [user, setUser] = useState({
-    name: 'Shashwat Negi',
-    initials: 'SN',
-    email: 'shashwat@email.com',
-    phone: '',
-    bio: '',
-    avatarUrl: '',
-  });
+  const [user, setUser] = useState(null); // null = not yet loaded
+
+  useEffect(() => {
+    fetch('http://localhost:8080/api/auth/me', { credentials: 'include' })
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data) {
+          setUser({
+            name: data.name || data.email || '',
+            initials: toInitials(data.name || data.email || ''),
+            email: data.email || '',
+            phone: '',
+            bio: '',
+            avatarUrl: '',
+          });
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const [settings, setSettings] = useState({
     language: 'en',
@@ -37,12 +56,7 @@ export function ThemeProvider({ children }) {
   const updateUser = (updates) =>
     setUser((prev) => {
       const next = { ...prev, ...updates };
-      if (updates.name) {
-        const parts = updates.name.trim().split(/\s+/);
-        next.initials = parts.length >= 2
-          ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
-          : parts[0].slice(0, 2).toUpperCase();
-      }
+      if (updates.name) next.initials = toInitials(updates.name);
       return next;
     });
 

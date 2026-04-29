@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Row, Col, Nav } from 'react-bootstrap';
 import {
   Calendar, DollarSign, MapPin, Settings,
-  UserPlus, Pencil, ChevronLeft, X, Crown, Mail, Users,
+  UserPlus, Pencil, ChevronLeft, X, Crown, Mail, Users, Trash2,
 } from 'lucide-react';
 import TopNavbar from '../components/TopNavbar';
 import AvatarGroup from '../components/AvatarGroup';
@@ -17,8 +17,8 @@ const defaultImage = 'https://images.unsplash.com/photo-1587474260584-136574528e
 
 const sidebarNav = [
   { id: 'calendar', label: 'Calendar', icon: Calendar },
-  { id: 'map', label: 'Map', icon: MapPin },
-  { id: 'budget', label: 'Budget', icon: DollarSign },
+  { id: 'map',      label: 'Map',      icon: MapPin },
+  { id: 'budget',   label: 'Budget',   icon: DollarSign },
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
@@ -38,20 +38,32 @@ function formatDateRange(start, end) {
 function TripDetails() {
   const navigate = useNavigate();
   const location = useLocation();
-  const tripData = location.state || {};
+  const tripId = location.state?.tripId;
+
+  const [trip, setTrip] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [activeNav, setActiveNav] = useState('calendar');
   const [showTripInfo, setShowTripInfo] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
-  const tripTitle = tripData.title || 'Delhi Trip';
-  const destination = tripData.destination || 'Delhi, India';
-  const tripImage = tripData.image || defaultImage;
-  const members = tripData.members || [
-    { name: 'Shashwat', color: '#f97316' },
-    { name: 'Sarah', color: '#22c55e' },
-    { name: 'Zara', color: '#3b82f6' },
-  ];
-  const guestCount = tripData.numPeople || members.length;
-  const dateRange = formatDateRange(tripData.startDate, tripData.endDate);
+  useEffect(() => {
+    if (!tripId) { setLoading(false); return; }
+    fetch(`http://localhost:8080/api/trips/${tripId}`, { credentials: 'include' })
+      .then(res => res.json())
+      .then(data => { setTrip(data); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, [tripId]);
+
+  if (loading) return <div className="home-v2"><TopNavbar /><p style={{ color: '#aaa', padding: 40 }}>Loading...</p></div>;
+  if (!trip) return <div className="home-v2"><TopNavbar /><p style={{ color: '#aaa', padding: 40 }}>Trip not found.</p></div>;
+
+  const tripTitle   = trip.title       || 'My Trip';
+  const destination = trip.destination || '';
+  const tripImage   = trip.imageUrl    || defaultImage;
+  const dateRange   = formatDateRange(trip.startDate, trip.endDate);
+  const guestCount  = trip.numTravelers || 1;
+  const members     = [{ name: 'You', color: '#3b82f6' }];
 
   return (
     <div className="home-v2">
@@ -76,7 +88,6 @@ function TripDetails() {
                         <X size={16} />
                       </button>
                     </div>
-
                     <div className="td-info-body">
                       <div className="td-info-row">
                         <span className="td-info-label">Trip Name</span>
@@ -96,9 +107,7 @@ function TripDetails() {
                         <span className="td-info-label"><Users size={14} /> Travelers</span>
                         <span className="td-info-value">{guestCount} people</span>
                       </div>
-
                       <div className="td-info-divider" />
-
                       <h4 className="td-info-section-title">Members</h4>
                       <div className="td-info-members">
                         {members.map((m, i) => (
@@ -111,24 +120,11 @@ function TripDetails() {
                                 {m.name}
                                 {i === 0 && <span className="td-info-admin-badge"><Crown size={10} /> Admin</span>}
                               </span>
-                              <span className="td-info-member-email">
-                                <Mail size={11} />
-                                {m.email || `${m.name.toLowerCase().replace(/\s+/g, '')}@email.com`}
-                              </span>
+                              <span className="td-info-member-email"><Mail size={11} /> {m.email || ''}</span>
                             </div>
                           </div>
                         ))}
                       </div>
-
-                      {tripData.inviteEmails && (
-                        <>
-                          <div className="td-info-divider" />
-                          <div className="td-info-row">
-                            <span className="td-info-label"><Mail size={14} /> Invited</span>
-                            <span className="td-info-value td-info-value-wrap">{tripData.inviteEmails}</span>
-                          </div>
-                        </>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -137,25 +133,14 @@ function TripDetails() {
               <div className="td-sidebar-info">
                 <h3 className="td-sidebar-title">{tripTitle}</h3>
                 {dateRange && (
-                  <p className="td-sidebar-meta">
-                    <Calendar size={14} />
-                    {dateRange}
-                  </p>
+                  <p className="td-sidebar-meta"><Calendar size={14} />{dateRange}</p>
                 )}
-                <p className="td-sidebar-meta">
-                  <MapPin size={14} />
-                  {destination}
-                </p>
-
+                <p className="td-sidebar-meta"><MapPin size={14} />{destination}</p>
                 <div className="td-sidebar-members">
                   <AvatarGroup members={members} max={4} size={32} />
                   <span className="td-sidebar-guest-count">{guestCount} guests</span>
                 </div>
-
-                <button className="td-sidebar-invite">
-                  <UserPlus size={16} />
-                  Invite Guests
-                </button>
+                <button className="td-sidebar-invite"><UserPlus size={16} />Invite Guests</button>
               </div>
             </div>
 
@@ -166,8 +151,7 @@ function TripDetails() {
                     className={`td-sidebar-nav-item ${activeNav === id ? 'active' : ''}`}
                     onClick={() => setActiveNav(id)}
                   >
-                    <Icon size={18} />
-                    {label}
+                    <Icon size={18} />{label}
                   </button>
                 </Nav.Item>
               ))}
@@ -177,13 +161,40 @@ function TripDetails() {
 
         <Col lg={9}>
           <div className="td-main">
-            <button className="tripdetails-back" onClick={() => navigate('/trips')}>
-              <ChevronLeft size={18} />
-              Back to Trips
-            </button>
+            <div className="td-main-topbar">
+              <button className="tripdetails-back" onClick={() => navigate('/trips')}>
+                <ChevronLeft size={18} />Back to Trips
+              </button>
+              <div className="td-delete-wrap">
+                {!confirmDelete ? (
+                  <button className="td-delete-btn" onClick={() => setConfirmDelete(true)}>
+                    <Trash2 size={15} /> Delete Trip
+                  </button>
+                ) : (
+                  <>
+                    <span className="td-delete-label">Delete this trip?</span>
+                    <button
+                      className="td-delete-confirm-btn"
+                      disabled={deleting}
+                      onClick={async () => {
+                        setDeleting(true);
+                        await fetch(`http://localhost:8080/api/trips/${tripId}`, {
+                          method: 'DELETE',
+                          credentials: 'include',
+                        });
+                        navigate('/trips');
+                      }}
+                    >
+                      {deleting ? 'Deleting…' : 'Yes, delete'}
+                    </button>
+                    <button className="td-delete-cancel-btn" onClick={() => setConfirmDelete(false)}>Cancel</button>
+                  </>
+                )}
+              </div>
+            </div>
 
             {activeNav === 'calendar' && (
-              <ItineraryCalendar tripTitle={tripTitle} destination={destination} />
+              <ItineraryCalendar tripId={tripId} tripTitle={tripTitle} destination={destination} />
             )}
             {activeNav === 'budget' && (
               <div className="td-placeholder">
@@ -192,12 +203,10 @@ function TripDetails() {
                 <p>Track and manage your trip expenses</p>
               </div>
             )}
-            {activeNav === 'map' && (
-              <TripMap destination={destination} />
-            )}
+            {activeNav === 'map' && <TripMap destination={destination} />}
             {activeNav === 'settings' && (
               <TripSettings
-                tripData={tripData}
+                tripData={{ ...trip, tripId }}
                 onRegenerate={(updated) => {
                   navigate('/trips/details', { state: updated, replace: true });
                   setActiveNav('calendar');

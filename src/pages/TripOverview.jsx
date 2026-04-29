@@ -1,30 +1,44 @@
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
-import { Users, PlusCircle, ArrowLeft } from 'lucide-react';
+import { Users, PlusCircle, ArrowLeft, Trash2 } from 'lucide-react';
 import TopNavbar from '../components/TopNavbar';
 import NewTripModal from '../components/NewTripModal';
-import { useState } from 'react';
-import { sampleTrips } from '../data/trips';
+import { useState, useEffect } from 'react';
 import './Home.css';
 import './NewTrip.css';
 
 function TripOverview() {
   const navigate = useNavigate();
   const [newTripOpen, setNewTripOpen] = useState(false);
+  const [trips, setTrips] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('http://localhost:8080/api/trips', { credentials: 'include' })
+      .then(res => res.json())
+      .then(data => { setTrips(Array.isArray(data) ? data : []); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
   const handleTripClick = (trip) => {
-    navigate('/trips/details', {
-      state: {
-        title: trip.title,
-        destination: trip.destination,
-        startDate: trip.startDate,
-        endDate: trip.endDate,
-        numPeople: trip.travelers,
-        members: trip.members,
-        image: trip.image,
-        planTier: trip.planTier,
-      },
+    navigate('/trips/details', { state: { tripId: trip.tid } });
+  };
+
+  const handleDeleteTrip = async (tripId) => {
+    await fetch(`http://localhost:8080/api/trips/${tripId}`, {
+      method: 'DELETE',
+      credentials: 'include',
     });
+    setTrips((prev) => prev.filter((t) => t.tid !== tripId));
+    setConfirmDeleteId(null);
+  };
+
+  const formatDates = (start, end) => {
+    if (!start) return '';
+    const fmt = d => new Date(d + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' });
+    return end ? `${fmt(start)} – ${fmt(end)}` : fmt(start);
   };
 
   return (
@@ -42,50 +56,68 @@ function TripOverview() {
           </div>
         </div>
 
-        <Row className="g-4">
-          {sampleTrips.map((trip) => (
-            <Col sm={6} lg={4} key={trip.id}>
-              <div className="trip-card" onClick={() => handleTripClick(trip)} style={{ cursor: 'pointer' }}>
-                <div
-                  className="trip-card-image"
-                  style={{ backgroundImage: `url(${trip.image})` }}
-                >
-                  <span className={`trip-badge ${trip.status === 'Active' ? 'badge-active' : 'badge-inplanning'}`}>
-                    {trip.status}
-                  </span>
-                </div>
-                <div className="trip-card-body">
-                  <h3 className="trip-card-title">{trip.title}</h3>
-                  <p className="trip-card-dates">{trip.dates}</p>
-                  <div className="trip-card-footer">
-                    <span className="trip-members">
-                      <Users size={16} />
-                      {trip.travelers} {trip.travelers === 1 ? 'traveler' : 'travelers'}
+        {loading ? (
+          <p className="text-center" style={{ color: '#aaa' }}>Loading trips...</p>
+        ) : (
+          <Row className="g-4">
+            {trips.map((trip) => (
+              <Col sm={6} lg={4} key={trip.tid}>
+                <div className="trip-card" style={{ cursor: 'pointer' }}>
+                  <div
+                    className="trip-card-image"
+                    style={{ backgroundImage: `url(${trip.imageUrl || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80'})` }}
+                    onClick={() => handleTripClick(trip)}
+                  >
+                    <span className={`trip-badge ${trip.status === 'ACTIVE' ? 'badge-active' : 'badge-inplanning'}`}>
+                      {trip.status}
                     </span>
-                    <button className="trip-view-btn">View</button>
                   </div>
+                  <div className="trip-card-body" onClick={() => handleTripClick(trip)}>
+                    <h3 className="trip-card-title">{trip.title}</h3>
+                    <p className="trip-card-dates">{formatDates(trip.startDate, trip.endDate)}</p>
+                    <div className="trip-card-footer">
+                      <span className="trip-members">
+                        <Users size={16} />
+                        {trip.numTravelers} {trip.numTravelers === 1 ? 'traveler' : 'travelers'}
+                      </span>
+                      <div className="trip-card-actions" onClick={(e) => e.stopPropagation()}>
+                        <button className="trip-view-btn" onClick={() => handleTripClick(trip)}>View</button>
+                        {confirmDeleteId === trip.tid ? (
+                          <>
+                            <button className="trip-delete-confirm-btn" onClick={() => handleDeleteTrip(trip.tid)}>Yes, delete</button>
+                            <button className="trip-delete-cancel-btn" onClick={() => setConfirmDeleteId(null)}>Cancel</button>
+                          </>
+                        ) : (
+                          <button className="trip-delete-btn" onClick={() => setConfirmDeleteId(trip.tid)} title="Delete trip">
+                            <Trash2 size={14} />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Col>
+            ))}
+
+            <Col sm={6} lg={4}>
+              <div className="trip-card add-trip-card" onClick={() => setNewTripOpen(true)} style={{ cursor: 'pointer' }}>
+                <div className="add-trip-content">
+                  <div className="add-trip-icon">
+                    <PlusCircle size={40} strokeWidth={1.5} />
+                  </div>
+                  <h3 className="add-trip-label">Plan a New Trip</h3>
+                  <p className="add-trip-hint">Start planning your next adventure</p>
                 </div>
               </div>
             </Col>
-          ))}
-
-          <Col sm={6} lg={4}>
-            <div className="trip-card add-trip-card" onClick={() => setNewTripOpen(true)} style={{ cursor: 'pointer' }}>
-              <div className="add-trip-content">
-                <div className="add-trip-icon">
-                  <PlusCircle size={40} strokeWidth={1.5} />
-                </div>
-                <h3 className="add-trip-label">Plan a New Trip</h3>
-                <p className="add-trip-hint">Start planning your next adventure</p>
-              </div>
-            </div>
-          </Col>
-        </Row>
+          </Row>
+        )}
       </Container>
 
       <NewTripModal
         isOpen={newTripOpen}
-        onClose={() => setNewTripOpen(false)}
+        onClose={() => { setNewTripOpen(false); }}
+        onTripCreated={(newTrip) => setTrips(prev => [...prev, newTrip])}
       />
     </div>
   );

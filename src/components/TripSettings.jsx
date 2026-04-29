@@ -34,6 +34,8 @@ const transportOptions = [
 ];
 
 function TripSettings({ tripData, onRegenerate }) {
+  const tripId = tripData.tripId;
+
   const [title, setTitle] = useState(tripData.title || '');
   const [destination, setDestination] = useState(tripData.destination || '');
   const [startDate, setStartDate] = useState(tripData.startDate || '');
@@ -43,13 +45,26 @@ function TripSettings({ tripData, onRegenerate }) {
   const [budget, setBudget] = useState(tripData.budget || '');
   const [tripType, setTripType] = useState(tripData.tripType || '');
   const [accommodation, setAccommodation] = useState(tripData.accommodation || '');
-  const [transport, setTransport] = useState(tripData.transport || '');
+  const [transport, setTransport] = useState(tripData.transportation || tripData.transport || '');
   const [interests, setInterests] = useState(
     tripData.interests ? tripData.interests.split(', ').filter(Boolean) : []
   );
   const [notes, setNotes] = useState(tripData.notes || '');
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [generating, setGenerating] = useState(false);
+  const [genError, setGenError] = useState('');
   const [interestError, setInterestError] = useState('');
+
+  const buildPrefsBody = () => ({
+    currentLocation,
+    budget,
+    tripType,
+    accommodation,
+    transportation: transport,
+    interests: interests.join(', '),
+    notes,
+  });
 
   const toggleInterest = (interest) => {
     setInterests((prev) => {
@@ -60,24 +75,57 @@ function TripSettings({ tripData, onRegenerate }) {
     setSaved(false);
   };
 
-  const handleSave = () => {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+  const handleSave = async () => {
+    setSaving(true);
+    setGenError('');
+    try {
+      const res = await fetch(`http://localhost:8080/api/trips/${tripId}/preferences`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(buildPrefsBody()),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (e) {
+      setGenError('Failed to save preferences: ' + e.message);
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleRegenerate = () => {
+  const handleRegenerate = async () => {
     if (interests.length < 3) {
       setInterestError('Select at least 3 interests to regenerate');
       return;
     }
     setInterestError('');
-    const updated = {
-      ...tripData,
-      title, destination, startDate, endDate, numPeople,
-      currentLocation, budget, tripType, accommodation, transport,
-      interests: interests.join(', '), notes,
-    };
-    if (onRegenerate) onRegenerate(updated);
+    setGenError('');
+    setGenerating(true);
+    try {
+      // Save latest preferences first
+      const prefRes = await fetch(`http://localhost:8080/api/trips/${tripId}/preferences`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(buildPrefsBody()),
+      });
+      if (!prefRes.ok) throw new Error('Failed to save preferences: ' + await prefRes.text());
+
+      // Trigger itinerary generation
+      const genRes = await fetch(`http://localhost:8080/api/trips/${tripId}/generate`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+      if (!genRes.ok) throw new Error('Generation failed: ' + await genRes.text());
+
+      if (onRegenerate) onRegenerate({ ...tripData, tripId });
+    } catch (e) {
+      setGenError(e.message);
+    } finally {
+      setGenerating(false);
+    }
   };
 
   return (
@@ -278,22 +326,31 @@ function TripSettings({ tripData, onRegenerate }) {
           variant="outline-secondary"
           className="trip-settings-save-btn"
           onClick={handleSave}
+          disabled={saving || generating}
         >
           <Save size={16} />
-          {saved ? 'Saved!' : 'Save Changes'}
+          {saving ? 'Saving...' : saved ? 'Saved!' : 'Save Preferences'}
         </Button>
         <Button
           className="trip-settings-regen-btn"
           onClick={handleRegenerate}
+          disabled={generating || saving}
         >
-          <RefreshCw size={16} />
-          Re-generate Itinerary
+          <RefreshCw size={16} className={generating ? 'spin' : ''} />
+          {generating ? 'Generating...' : 'Re-generate Itinerary'}
         </Button>
       </div>
 
+      {genError && (
+        <div className="trip-settings-warning" style={{ color: '#f43f5e', borderColor: '#f43f5e33' }}>
+          <AlertCircle size={14} />
+          {genError}
+        </div>
+      )}
+
       <div className="trip-settings-warning">
         <AlertCircle size={14} />
-        Re-generating will replace your current itinerary with a new one based on updated preferences.
+        Re-generating will replace your current itinerary with a new AI-generated one based on your preferences.
       </div>
     </div>
   );

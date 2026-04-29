@@ -31,6 +31,9 @@ function NewTripModal({ isOpen, onClose, initialData }) {
   const [interests, setInterests] = useState([]);
   const [interestError, setInterestError] = useState('');
   const [notes, setNotes] = useState('');
+  const [tripId, setTripId] = useState(null);
+  const [generating, setGenerating] = useState(false);
+  const [genError, setGenError] = useState('');
 
   useEffect(() => {
     if (initialData) {
@@ -59,42 +62,102 @@ function NewTripModal({ isOpen, onClose, initialData }) {
     });
   };
 
-const handleStep1Next = async (e) => {
+  const fetchDestinationImage = async (dest) => {
+    const key = import.meta.env.VITE_UNSPLASH_ACCESS_KEY;
+    if (!key) {
+      console.warn('VITE_UNSPLASH_ACCESS_KEY not set — restart Vite after adding .env');
+      return null;
+    }
+    try {
+      const res = await fetch(
+        `https://api.unsplash.com/photos/random?query=${encodeURIComponent(dest)}&orientation=landscape&content_filter=high&client_id=${key}`
+      );
+      if (!res.ok) {
+        console.error('Unsplash API error:', res.status, await res.text());
+        return null;
+      }
+      const data = await res.json();
+      return data?.urls?.regular || null;
+    } catch (err) {
+      console.error('Unsplash fetch failed:', err);
+      return null;
+    }
+  };
+
+  const handleStep1Next = async (e) => {
     e.preventDefault();
     try {
-        const res = await fetch('http://localhost:8080/api/trips', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({ title, destination, startDate, endDate, numTravelers: numPeople })
-        });
-        if (!res.ok) {
-            const err = await res.json();
-            alert(err.error || 'Failed to create trip');
-            return;  
-        }
-        setStep(2);   
+      const imageUrl = await fetchDestinationImage(destination);
+
+      const res = await fetch('http://localhost:8080/api/trips', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ title, destination, startDate, endDate, numTravelers: numPeople, imageUrl }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        alert(err.error || 'Failed to create trip');
+        return;
+      }
+      const data = await res.json();
+      setTripId(data.tid);
+      setStep(2);
     } catch (e) {
-        alert('Could not reach the server'+ e.message);
+      alert('Could not reach the server: ' + e.message);
     }
-};
+  };
 
-
-  const handleGenerate = (e) => {
+  const handleGenerate = async (e) => {
     e.preventDefault();
     if (interests.length < 3) {
       setInterestError('Please select at least 3 interests');
       return;
     }
     setInterestError('');
-    const tripData = {
-      title, destination, startDate, endDate, numPeople,
-      groupOption, groupName, inviteEmails,
-      currentLocation, budget, tripType, accommodation, transport,
-      interests: interests.join(', '), notes,
-    };
-    onClose();
-    navigate('/trips/details', { state: tripData });
+    setGenError('');
+    setGenerating(true);
+
+    try {
+      // Step 1: Save preferences
+      const prefRes = await fetch(`http://localhost:8080/api/trips/${tripId}/preferences`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          currentLocation,
+          budget,
+          tripType,
+          accommodation,
+          transportation: transport,
+          interests: interests.join(', '),
+          notes,
+        }),
+      });
+      if (!prefRes.ok) {
+        const err = await prefRes.json();
+        setGenError(err.error || 'Failed to save preferences');
+        return;
+      }
+
+      // Step 2: Generate itinerary via LLM (this calls Python agent, may take ~20s)
+      const genRes = await fetch(`http://localhost:8080/api/trips/${tripId}/generate`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+      if (!genRes.ok) {
+        const err = await genRes.json();
+        setGenError(err.error || 'Itinerary generation failed');
+        return;
+      }
+
+      onClose();
+      navigate('/trips/details', { state: { tripId } });
+    } catch (err) {
+      setGenError('Could not reach the server: ' + err.message);
+    } finally {
+      setGenerating(false);
+    }
   };
 
   return (
@@ -364,18 +427,30 @@ const handleStep1Next = async (e) => {
                 />
               </Form.Group>
 
+              {genError && (
+                <p className="newtrip-field-error" style={{ marginBottom: '12px' }}>{genError}</p>
+              )}
+
+              {generating && (
+                <div className="newtrip-generating-bar">
+                  <span className="loading-spinner" />
+                  AI is planning your trip... this may take ~20 seconds
+                </div>
+              )}
+
               <div className="newtrip-modal-actions">
                 <Button
                   variant="outline-light"
                   className="newtrip-back-btn"
                   onClick={() => setStep(1)}
+                  disabled={generating}
                 >
                   <ArrowLeft size={18} style={{ marginRight: '6px' }} />
                   Back
                 </Button>
-                <Button type="submit" variant="outline-light" className="newtrip-submit">
-                  Generate Itinerary
-                  <Star size={18} style={{ marginLeft: '8px' }} />
+                <Button type="submit" variant="outline-light" className="newtrip-submit" disabled={generating}>
+                  {generating ? 'Generating...' : 'Generate Itinerary'}
+                  {!generating && <Star size={18} style={{ marginLeft: '8px' }} />}
                 </Button>
               </div>
             </Form>
