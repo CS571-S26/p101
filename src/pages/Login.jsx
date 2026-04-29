@@ -12,36 +12,20 @@ function Login() {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     if (!email || !password) {
       alert('Please enter both email and password');
       return;
     }
-    try {
-      const res = await fetch('http://localhost:8080/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ email, password })
-      });
-      if (!res.ok) {
-        const err = await res.json();
-        alert(err.error || 'Login failed');
-        return;
-      }
-      navigate('/home');
-    } catch (e) {
-      alert('Could not reach the server');
-    }
+    navigate('/home');
   };
 
-
   const handleGoogleLogin = () => {
-    window.location.href= "http://localhost:8080/oauth2/authorization/google";
+    navigate('/home');
   };
 
   const handleGithubLogin = () => {
-    window.location.href = 'http://localhost:8080/oauth2/authorization/github';
+    navigate('/home');
   };
 
   return (

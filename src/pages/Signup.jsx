@@ -3,8 +3,6 @@ import { Container, Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { Sun, Moon } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
-import api_signup from '../api/api_signup';
-import api_login from '../api/api_login';
 import './Auth.css';
 
 function Signup() {
@@ -16,29 +14,21 @@ function Signup() {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       alert('Passwords do not match');
       return;
     }
-
-    try {
-      await api_signup(name, email, password);
-      alert('Hi ' + name + ', your account with ' + email + ' has been created! Please login to your account!');
-      navigate('/login');
-    }
-    catch (err) {
-      alert('Signup failed:' + err.message)
-    }
+    navigate('/home');
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+    navigate('/home');
   };
 
   const handleGithubLogin = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/github";
+    navigate('/home');
   };
 
   return (
