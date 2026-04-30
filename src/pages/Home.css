@@ -402,13 +402,22 @@
 
 .adventure-card-image {
   height: 200px;
-  background-size: cover;
-  background-position: center;
   position: relative;
+  overflow: hidden;
   transition: transform 0.4s;
 }
 
-.adventure-card:hover .adventure-card-image {
+.adventure-card-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.4s;
+}
+
+.adventure-card:hover .adventure-card-img {
   transform: scale(1.03);
 }
 
@@ -742,13 +751,21 @@
 
 .trip-card-image {
   height: 170px;
-  background-size: cover;
-  background-position: center;
   position: relative;
   overflow: hidden;
 }
 
-.trip-card:hover .trip-card-image {
+.trip-card-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.4s;
+}
+
+.trip-card:hover .trip-card-img {
   transform: scale(1.02);
 }
 
@@ -885,11 +902,19 @@
 
 .modal-hero {
   height: 200px;
-  background-size: cover;
-  background-position: center;
   position: relative;
   border-radius: 20px 20px 0 0;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.modal-hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .modal-hero-overlay {

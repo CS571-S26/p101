@@ -4,6 +4,7 @@ import { Users, PlusCircle, ArrowLeft, Trash2 } from 'lucide-react';
 import TopNavbar from '../components/TopNavbar';
 import NewTripModal from '../components/NewTripModal';
 import { useState, useEffect } from 'react';
+import { API_BASE } from '../config';
 import './Home.css';
 import './NewTrip.css';
 
@@ -14,7 +15,7 @@ function TripOverview() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/trips', { credentials: 'include' })
+    fetch(`${API_BASE}/api/trips`, { credentials: 'include' })
       .then(res => res.json())
       .then(data => { setTrips(Array.isArray(data) ? data : []); setLoading(false); })
       .catch(() => setLoading(false));
@@ -27,7 +28,7 @@ function TripOverview() {
   };
 
   const handleDeleteTrip = async (tripId) => {
-    await fetch(`http://localhost:8080/api/trips/${tripId}`, {
+    await fetch(`${API_BASE}/api/trips/${tripId}`, {
       method: 'DELETE',
       credentials: 'include',
     });
@@ -100,7 +101,7 @@ function TripOverview() {
             ))}
 
             <Col sm={6} lg={4}>
-              <div className="trip-card add-trip-card" onClick={() => setNewTripOpen(true)} style={{ cursor: 'pointer' }}>
+              <button className="trip-card add-trip-card" onClick={() => setNewTripOpen(true)} aria-label="Plan a new trip">
                 <div className="add-trip-content">
                   <div className="add-trip-icon">
                     <PlusCircle size={40} strokeWidth={1.5} />
@@ -108,7 +109,7 @@ function TripOverview() {
                   <h3 className="add-trip-label">Plan a New Trip</h3>
                   <p className="add-trip-hint">Start planning your next adventure</p>
                 </div>
-              </div>
+              </button>
             </Col>
           </Row>
         )}

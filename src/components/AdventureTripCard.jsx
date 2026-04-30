@@ -48,7 +48,12 @@ function AdventureTripCard({ trip, onClick, onDelete }) {
 
   return (
     <div className="adventure-card" onClick={onClick}>
-      <div className="adventure-card-image" style={{ backgroundImage: `url(${image})` }}>
+      <div className="adventure-card-image">
+        <img
+          src={image}
+          alt={`${trip.title} destination`}
+          className="adventure-card-img"
+        />
         {days !== null && (
           <div className="adventure-card-countdown">
             <Calendar size={14} />

@@ -10,6 +10,8 @@ import AvatarGroup from '../components/AvatarGroup';
 import ItineraryCalendar from '../components/ItineraryCalendar';
 import TripMap from '../components/TripMap';
 import TripSettings from '../components/TripSettings';
+import BudgetTracker from '../components/BudgetTracker';
+import { API_BASE } from '../config';
 import './Home.css';
 import './NewTrip.css';
 
@@ -49,7 +51,7 @@ function TripDetails() {
 
   useEffect(() => {
     if (!tripId) { setLoading(false); return; }
-    fetch(`http://localhost:8080/api/trips/${tripId}`, { credentials: 'include' })
+    fetch(`${API_BASE}/api/trips/${tripId}`, { credentials: 'include' })
       .then(res => res.json())
       .then(data => { setTrip(data); setLoading(false); })
       .catch(() => setLoading(false));
@@ -178,7 +180,7 @@ function TripDetails() {
                       disabled={deleting}
                       onClick={async () => {
                         setDeleting(true);
-                        await fetch(`http://localhost:8080/api/trips/${tripId}`, {
+                        await fetch(`${API_BASE}/api/trips/${tripId}`, {
                           method: 'DELETE',
                           credentials: 'include',
                         });
@@ -197,11 +199,12 @@ function TripDetails() {
               <ItineraryCalendar tripId={tripId} tripTitle={tripTitle} destination={destination} />
             )}
             {activeNav === 'budget' && (
-              <div className="td-placeholder">
-                <DollarSign size={40} />
-                <h3>Budget</h3>
-                <p>Track and manage your trip expenses</p>
-              </div>
+              <BudgetTracker
+                members={members}
+                tripId={String(tripId)}
+                totalBudget={trip.budget || 5000}
+                budgetCurrency="USD"
+              />
             )}
             {activeNav === 'map' && <TripMap destination={destination} />}
             {activeNav === 'settings' && (

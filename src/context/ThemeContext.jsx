@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { API_BASE } from '../config';
 
 const ThemeContext = createContext();
 
@@ -16,7 +17,7 @@ export function ThemeProvider({ children }) {
   const [user, setUser] = useState(null); // null = not yet loaded
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/auth/me', { credentials: 'include' })
+    fetch(`${API_BASE}/api/auth/me`, { credentials: 'include' })
       .then(res => res.ok ? res.json() : null)
       .then(data => {
         if (data) {

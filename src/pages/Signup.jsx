@@ -5,6 +5,7 @@ import { Sun, Moon } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import api_signup from '../api/api_signup';
 import api_login from '../api/api_login';
+import { API_BASE } from '../config';
 import './Auth.css';
 
 function Signup() {
@@ -34,11 +35,11 @@ function Signup() {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+    window.location.href = `${API_BASE}/oauth2/authorization/google`;
   };
 
   const handleGithubLogin = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/github";
+    window.location.href = `${API_BASE}/oauth2/authorization/github`;
   };
 
   return (
@@ -89,6 +90,7 @@ function Signup() {
               <Form.Control
                 type="text"
                 placeholder="Name"
+                aria-label="Full name"
                 className="auth-input"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -100,6 +102,7 @@ function Signup() {
               <Form.Control
                 type="email"
                 placeholder="Email"
+                aria-label="Email address"
                 className="auth-input"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -112,18 +115,20 @@ function Signup() {
                 <Form.Control
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Password"
+                  aria-label="Password"
                   className="auth-input"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-                <InputGroup.Text
+                <button
+                  type="button"
                   className="auth-input-toggle"
                   onClick={() => setShowPassword(!showPassword)}
-                  style={{ cursor: 'pointer' }}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? '👁' : '👁‍🗨'}
-                </InputGroup.Text>
+                </button>
               </InputGroup>
             </Form.Group>
 
@@ -131,6 +136,7 @@ function Signup() {
               <Form.Control
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Confirm Password"
+                aria-label="Confirm password"
                 className="auth-input"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}

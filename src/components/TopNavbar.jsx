@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Container, Nav } from 'react-bootstrap';
 import { ChevronDown, Settings, Sun, Moon, LogOut, Home, Map, Info } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { API_BASE } from '../config';
 
 const NAV_ITEMS = [
   { path: '/home', label: 'Home', icon: Home },
@@ -63,7 +64,7 @@ function TopNavbar() {
                   className="navbar-dropdown-item navbar-dropdown-logout"
                   onClick={async () => {
                     setDropdownOpen(false);
-                    await fetch('http://localhost:8080/api/auth/logout', { method: 'POST', credentials: 'include' });
+                    await fetch(`${API_BASE}/api/auth/logout`, { method: 'POST', credentials: 'include' });
                     navigate('/login');
                   }}
                 >

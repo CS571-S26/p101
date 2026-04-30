@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { API_BASE } from '../config';
 import { Row, Col, Stack } from 'react-bootstrap';
 import {
   ChevronLeft, ChevronRight, CalendarDays, LayoutGrid,
@@ -346,8 +347,8 @@ function EventDetailPanel({ event, createMode, dayId, onClose, currentDate, dest
         endTime,
       };
       const url = createMode
-        ? `http://localhost:8080/api/events/day/${dayId}`
-        : `http://localhost:8080/api/events/${event.eventId}`;
+        ? `${API_BASE}/api/events/day/${dayId}`
+        : `${API_BASE}/api/events/${event.eventId}`;
       const method = createMode ? 'POST' : 'PUT';
       const res = await fetch(url, {
         method,
@@ -368,7 +369,7 @@ function EventDetailPanel({ event, createMode, dayId, onClose, currentDate, dest
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      await fetch(`http://localhost:8080/api/events/${event.eventId}`, {
+      await fetch(`${API_BASE}/api/events/${event.eventId}`, {
         method: 'DELETE',
         credentials: 'include',
       });
@@ -745,7 +746,7 @@ function ItineraryCalendar({ tripId, tripTitle, destination }) {
 
   const loadItinerary = () => {
     if (!tripId) { setItineraryLoading(false); return; }
-    fetch(`http://localhost:8080/api/trips/${tripId}/itinerary`, { credentials: 'include' })
+    fetch(`${API_BASE}/api/trips/${tripId}/itinerary`, { credentials: 'include' })
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {

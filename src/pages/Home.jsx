@@ -4,6 +4,7 @@ import TopNavbar from '../components/TopNavbar';
 import HeroSection from '../components/HeroSection';
 import AdventuresSection from '../components/AdventuresSection';
 import NewTripModal from '../components/NewTripModal';
+import { API_BASE } from '../config';
 import './Home.css';
 import './NewTrip.css';
 
@@ -14,7 +15,7 @@ function Home() {
   const [newTripData, setNewTripData] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/trips', { credentials: 'include' })
+    fetch(`${API_BASE}/api/trips`, { credentials: 'include' })
       .then(res => res.json())
       .then(data => setTrips(Array.isArray(data) ? data : []))
       .catch(() => {});
@@ -25,7 +26,7 @@ function Home() {
   };
 
   const handleDeleteTrip = async (tripId) => {
-    await fetch(`http://localhost:8080/api/trips/${tripId}`, {
+    await fetch(`${API_BASE}/api/trips/${tripId}`, {
       method: 'DELETE',
       credentials: 'include',
     });

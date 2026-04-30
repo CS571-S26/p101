@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { X, ArrowRight, ArrowLeft, Star } from 'lucide-react';
 import PlaceAutocomplete from './PlaceAutocomplete';
+import { API_BASE } from '../config';
 
 const interestOptions = [
   'Museums', 'Food & Dining', 'Adventure', 'Nightlife',
@@ -89,7 +90,7 @@ function NewTripModal({ isOpen, onClose, initialData }) {
     try {
       const imageUrl = await fetchDestinationImage(destination);
 
-      const res = await fetch('http://localhost:8080/api/trips', {
+      const res = await fetch(`${API_BASE}/api/trips`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -120,7 +121,7 @@ function NewTripModal({ isOpen, onClose, initialData }) {
 
     try {
       // Step 1: Save preferences
-      const prefRes = await fetch(`http://localhost:8080/api/trips/${tripId}/preferences`, {
+      const prefRes = await fetch(`${API_BASE}/api/trips/${tripId}/preferences`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -141,7 +142,7 @@ function NewTripModal({ isOpen, onClose, initialData }) {
       }
 
       // Step 2: Generate itinerary via LLM (this calls Python agent, may take ~20s)
-      const genRes = await fetch(`http://localhost:8080/api/trips/${tripId}/generate`, {
+      const genRes = await fetch(`${API_BASE}/api/trips/${tripId}/generate`, {
         method: 'POST',
         credentials: 'include',
       });
@@ -403,13 +404,15 @@ function NewTripModal({ isOpen, onClose, initialData }) {
                 </div>
                 <div className="interests-grid">
                   {interestOptions.map((interest) => (
-                    <span
+                    <button
                       key={interest}
+                      type="button"
                       className={`interest-chip ${interests.includes(interest) ? 'active' : ''}`}
                       onClick={() => toggleInterest(interest)}
+                      aria-pressed={interests.includes(interest)}
                     >
                       {interest}
-                    </span>
+                    </button>
                   ))}
                 </div>
                 {interestError && <p className="newtrip-field-error">{interestError}</p>}

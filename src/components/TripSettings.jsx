@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { RefreshCw, Save, AlertCircle } from 'lucide-react';
 import PlaceAutocomplete from './PlaceAutocomplete';
+import { API_BASE } from '../config';
 
 const interestOptions = [
   'Museums', 'Food & Dining', 'Adventure', 'Nightlife',
@@ -79,7 +80,7 @@ function TripSettings({ tripData, onRegenerate }) {
     setSaving(true);
     setGenError('');
     try {
-      const res = await fetch(`http://localhost:8080/api/trips/${tripId}/preferences`, {
+      const res = await fetch(`${API_BASE}/api/trips/${tripId}/preferences`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -105,7 +106,7 @@ function TripSettings({ tripData, onRegenerate }) {
     setGenerating(true);
     try {
       // Save latest preferences first
-      const prefRes = await fetch(`http://localhost:8080/api/trips/${tripId}/preferences`, {
+      const prefRes = await fetch(`${API_BASE}/api/trips/${tripId}/preferences`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -114,7 +115,7 @@ function TripSettings({ tripData, onRegenerate }) {
       if (!prefRes.ok) throw new Error('Failed to save preferences: ' + await prefRes.text());
 
       // Trigger itinerary generation
-      const genRes = await fetch(`http://localhost:8080/api/trips/${tripId}/generate`, {
+      const genRes = await fetch(`${API_BASE}/api/trips/${tripId}/generate`, {
         method: 'POST',
         credentials: 'include',
       });
