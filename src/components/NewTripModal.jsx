@@ -23,6 +23,7 @@ function NewTripModal({ isOpen, onClose, initialData }) {
   const [groupOption, setGroupOption] = useState('individual');
   const [groupName, setGroupName] = useState('');
   const [inviteEmails, setInviteEmails] = useState('');
+  const [step1Error, setStep1Error] = useState('');
 
   const [currentLocation, setCurrentLocation] = useState('');
   const [budget, setBudget] = useState('');
@@ -87,6 +88,7 @@ function NewTripModal({ isOpen, onClose, initialData }) {
 
   const handleStep1Next = async (e) => {
     e.preventDefault();
+    setStep1Error('');
     try {
       const imageUrl = await fetchDestinationImage(destination);
 
@@ -97,15 +99,15 @@ function NewTripModal({ isOpen, onClose, initialData }) {
         body: JSON.stringify({ title, destination, startDate, endDate, numTravelers: numPeople, imageUrl }),
       });
       if (!res.ok) {
-        const err = await res.json();
-        alert(err.error || 'Failed to create trip');
+        const err = await res.json().catch(() => ({}));
+        setStep1Error(err.error || 'Failed to create trip. Please try again.');
         return;
       }
       const data = await res.json();
       setTripId(data.tid);
       setStep(2);
     } catch (e) {
-      alert('Could not reach the server: ' + e.message);
+      setStep1Error('Could not reach the server. Please check your connection.');
     }
   };
 
@@ -186,6 +188,7 @@ function NewTripModal({ isOpen, onClose, initialData }) {
         <div className="newtrip-modal-body">
           {step === 1 && (
             <Form onSubmit={handleStep1Next} className="newtrip-form">
+              {step1Error && <div className="auth-error" style={{ marginBottom: '1rem' }}>{step1Error}</div>}
               <Form.Group className="mb-3">
                 <Form.Label className="newtrip-label">Trip Title</Form.Label>
                 <Form.Control

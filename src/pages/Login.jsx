@@ -10,13 +10,16 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
 
   const handleLogin = async (e) => {
     e?.preventDefault();
+    setError('');
+
     if (!email || !password) {
-      alert('Please enter both email and password');
+      setError('Please enter both email and password');
       return;
     }
     try {
@@ -27,16 +30,15 @@ function Login() {
         body: JSON.stringify({ email, password })
       });
       if (!res.ok) {
-        const err = await res.json();
-        alert(err.error || 'Login failed');
+        const err = await res.json().catch(() => ({}));
+        setError(err.error || 'Invalid email or password');
         return;
       }
       navigate('/home');
-    } catch (e) {
-      alert('Could not reach the server');
+    } catch {
+      setError('Could not reach the server. Please try again.');
     }
   };
-
 
   const handleGoogleLogin = () => {
     window.location.href = `${API_BASE}/oauth2/authorization/google`;
@@ -52,7 +54,6 @@ function Login() {
         {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
       </button>
       <Row className="auth-container mx-auto g-0">
-        {/* Left Panel - Hero */}
         <Col md={6} className="auth-left d-none d-md-flex">
           <div className="auth-overlay">
             <h2 className="auth-quote">
@@ -64,7 +65,6 @@ function Login() {
           </p>
         </Col>
 
-        {/* Right Panel - Form */}
         <Col md={6} xs={12} className="auth-right d-flex flex-column align-items-center justify-content-center p-md-4 p-3">
           <h1 className="auth-brand">VOYAGO</h1>
 
@@ -90,6 +90,8 @@ function Login() {
           <p className="auth-divider">or use your email account</p>
 
           <Form className="w-100 px-3" style={{ maxWidth: '320px' }} onSubmit={handleLogin}>
+            {error && <div className="auth-error">{error}</div>}
+
             <Form.Group className="mb-3">
               <Form.Control
                 type="email"
@@ -97,7 +99,7 @@ function Login() {
                 aria-label="Email address"
                 className="auth-input"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => { setEmail(e.target.value); setError(''); }}
                 required
               />
             </Form.Group>
@@ -110,7 +112,7 @@ function Login() {
                   aria-label="Password"
                   className="auth-input"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => { setPassword(e.target.value); setError(''); }}
                   required
                 />
                 <button

@@ -9,9 +9,18 @@ export async function api_login(email, password)
         headers:{
             'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body:JSON.stringify({email,password})
     });
-    if (!res.ok) throw new Error( await res.text());
+    if (!res.ok) {
+        const body = await res.text();
+        let message = 'Login failed';
+        try {
+            const parsed = JSON.parse(body);
+            message = parsed.error || parsed.message || message;
+        } catch { message = body || message; }
+        throw new Error(message);
+    }
     return res.json();
 
 }

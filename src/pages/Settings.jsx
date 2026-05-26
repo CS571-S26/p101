@@ -4,7 +4,7 @@ import { Container, Row, Col, Nav, Stack } from 'react-bootstrap';
 import {
   User, Palette, Bell, Shield, Globe, CreditCard,
   ChevronRight, Check, X, Eye,
-  Trash2, Download, Lock, Mail, Phone, Smartphone,
+  Trash2, Lock, Mail, Phone, Smartphone,
   ArrowLeft,
 } from 'lucide-react';
 import TopNavbar from '../components/TopNavbar';
@@ -39,6 +39,7 @@ function Settings() {
   const [profileDraft, setProfileDraft] = useState({ ...user });
   const [saved, setSaved] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showProMessage, setShowProMessage] = useState(false);
 
   const showSaved = () => {
     setSaved(true);
@@ -299,18 +300,12 @@ function Settings() {
           <span className="settings-plan-name">Voyago Free</span>
           <span className="settings-plan-tag">Current Plan</span>
         </div>
-        <button className="settings-btn-accent" style={{ marginTop: '1rem' }}>
+        <button className="settings-btn-accent" style={{ marginTop: '1rem' }} onClick={() => setShowProMessage(true)}>
           Upgrade to Pro
         </button>
-      </div>
-
-      <div className="settings-card">
-        <h4 className="settings-card-title">Data & Export</h4>
-        <p className="settings-card-desc">Download or manage your personal data.</p>
-        <button className="settings-link-btn">
-          <Download size={16} /> Export All Data
-          <ChevronRight size={16} className="settings-link-arrow" />
-        </button>
+        {showProMessage && (
+          <p className="settings-coming-soon">Coming soon! Pro features are currently under development.</p>
+        )}
       </div>
 
       <div className="settings-card settings-card-danger">

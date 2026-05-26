@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Sun, Moon } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import api_signup from '../api/api_signup';
-import api_login from '../api/api_login';
 import { API_BASE } from '../config';
 import './Auth.css';
 
@@ -14,23 +13,42 @@ function Signup() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
 
+  const passwordRules = [
+    { test: (pw) => pw.length >= 8, label: 'At least 8 characters' },
+    { test: (pw) => /[A-Z]/.test(pw), label: 'One uppercase letter' },
+    { test: (pw) => /[a-z]/.test(pw), label: 'One lowercase letter' },
+    { test: (pw) => /[0-9]/.test(pw), label: 'One number' },
+    { test: (pw) => /[^A-Za-z0-9]/.test(pw), label: 'One special character (!@#$...)' },
+  ];
+
+  const allRulesPassed = passwordRules.every((r) => r.test(password));
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    setSuccess('');
+
+    if (!allRulesPassed) {
+      setError('Please meet all password requirements');
+      return;
+    }
+
     if (password !== confirmPassword) {
-      alert('Passwords do not match');
+      setError('Passwords do not match');
       return;
     }
 
     try {
       await api_signup(name, email, password);
-      alert('Hi ' + name + ', your account with ' + email + ' has been created! Please login to your account!');
-      navigate('/login');
-    }
-    catch (err) {
-      alert('Signup failed:' + err.message)
+      setSuccess(`Welcome ${name}! Your account has been created. Redirecting to login...`);
+      setTimeout(() => navigate('/login'), 2000);
+    } catch (err) {
+      setError(err.message || 'Signup failed. Please try again.');
     }
   };
 
@@ -42,13 +60,14 @@ function Signup() {
     window.location.href = `${API_BASE}/oauth2/authorization/github`;
   };
 
+  const clearMessages = () => { setError(''); setSuccess(''); };
+
   return (
     <Container fluid className="auth-page p-0">
       <button className="auth-theme-toggle" onClick={toggleTheme} title={theme === 'light' ? 'Switch to Blue' : 'Switch to Light'}>
         {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
       </button>
       <Row className="auth-container mx-auto g-0">
-        {/* Left Panel - Hero */}
         <Col md={6} className="auth-left d-none d-md-flex">
           <div className="auth-overlay">
             <h2 className="auth-quote">
@@ -60,7 +79,6 @@ function Signup() {
           </p>
         </Col>
 
-        {/* Right Panel - Form */}
         <Col md={6} xs={12} className="auth-right d-flex flex-column align-items-center justify-content-center p-md-4 p-3">
           <h1 className="auth-brand">VOYAGO</h1>
 
@@ -86,6 +104,9 @@ function Signup() {
           <p className="auth-divider">or create an account with email</p>
 
           <Form className="w-100 px-3" style={{ maxWidth: '320px' }} onSubmit={handleSubmit}>
+            {error && <div className="auth-error">{error}</div>}
+            {success && <div className="auth-success">{success}</div>}
+
             <Form.Group className="mb-3">
               <Form.Control
                 type="text"
@@ -93,7 +114,7 @@ function Signup() {
                 aria-label="Full name"
                 className="auth-input"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => { setName(e.target.value); clearMessages(); }}
                 required
               />
             </Form.Group>
@@ -105,7 +126,7 @@ function Signup() {
                 aria-label="Email address"
                 className="auth-input"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => { setEmail(e.target.value); clearMessages(); }}
                 required
               />
             </Form.Group>
@@ -118,7 +139,7 @@ function Signup() {
                   aria-label="Password"
                   className="auth-input"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => { setPassword(e.target.value); clearMessages(); }}
                   required
                 />
                 <button
@@ -130,6 +151,15 @@ function Signup() {
                   {showPassword ? '👁' : '👁‍🗨'}
                 </button>
               </InputGroup>
+              {password && (
+                <ul className="password-rules">
+                  {passwordRules.map((rule, i) => (
+                    <li key={i} className={rule.test(password) ? 'rule-pass' : 'rule-fail'}>
+                      {rule.test(password) ? '✓' : '✗'} {rule.label}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -139,7 +169,7 @@ function Signup() {
                 aria-label="Confirm password"
                 className="auth-input"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={(e) => { setConfirmPassword(e.target.value); clearMessages(); }}
                 required
               />
             </Form.Group>

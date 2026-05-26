@@ -3,7 +3,7 @@ FROM node:20-alpine AS build
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 COPY . .
 
@@ -17,8 +17,8 @@ RUN npm run build
 # ── Stage 2: Serve with Nginx ────────────────────────────────────────────────
 FROM nginx:alpine
 
-# Copy built static files; Vite outputs to docs/ with base /p101/
-COPY --from=build /app/docs /usr/share/nginx/html/p101
+# Vite build output → Nginx web root
+COPY --from=build /app/dist /usr/share/nginx/html
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 

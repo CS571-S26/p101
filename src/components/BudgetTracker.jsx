@@ -302,7 +302,14 @@ export default function BudgetTracker({
   const barClass = pct > 90 ? 'bt-bar-danger' : pct > 70 ? 'bt-bar-warning' : 'bt-bar-ok';
 
   return (
-    <div className="budget-tracker">
+    <div className="budget-tracker" style={{ position: 'relative' }}>
+      <div className="bt-coming-soon-overlay">
+        <div className="bt-coming-soon-badge">
+          <span className="bt-coming-soon-icon">🚀</span>
+          <h3>Budget Tracker — Coming Soon</h3>
+          <p>We're building a powerful expense tracking and split feature. Stay tuned!</p>
+        </div>
+      </div>
       {backendOnline === false && (
         <div className="bt-banner bt-banner-warn">
           Backend offline — changes are saved locally only and will reset on refresh.
