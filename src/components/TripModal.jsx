@@ -7,10 +7,12 @@ function TripModal({ trip, editingDay, editText, onClose, onDelete, onStartEdit,
 
   return (
     <Modal show={!!trip} onHide={onClose} centered size="lg" className="trip-modal-rb">
-      <div
-        className="modal-hero"
-        style={{ backgroundImage: `url(${trip.image})` }}
-      >
+      <div className="modal-hero">
+        <img
+          src={trip.image}
+          alt={`${trip.title} destination`}
+          className="modal-hero-img"
+        />
         <div className="modal-hero-overlay">
           <button className="modal-close" onClick={onClose}>
             <X size={22} />

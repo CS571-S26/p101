@@ -9,10 +9,12 @@ function getBadgeClass(status) {
 function TripCard({ trip, onClick }) {
   return (
     <div className="trip-card" onClick={onClick}>
-      <div
-        className="trip-card-image"
-        style={{ backgroundImage: `url(${trip.image})` }}
-      >
+      <div className="trip-card-image">
+        <img
+          src={trip.image}
+          alt={`${trip.title} destination`}
+          className="trip-card-img"
+        />
         <span className={`trip-badge ${getBadgeClass(trip.status)}`}>
           {trip.status}
         </span>

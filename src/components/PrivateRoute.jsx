@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
+import { API_BASE } from '../config'
 
-const BASE_URL = 'http://localhost:8080'
+const BASE_URL = API_BASE
 
 export default function PrivateRoute({ children }) {
     const [status, setStatus] = useState('checking') // 'checking' | 'ok' | 'denied'

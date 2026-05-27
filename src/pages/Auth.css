@@ -252,6 +252,90 @@
   flex-shrink: 0;
 }
 
+/* ── Inline Error / Success Messages ── */
+.auth-error {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  text-align: center;
+  animation: authMsgShake 0.4s ease-out;
+}
+
+.auth-success {
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #86efac;
+  font-size: 0.84rem;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  text-align: center;
+  animation: authMsgSlide 0.25s ease-out;
+}
+
+[data-theme="light"] .auth-error {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #dc2626;
+}
+
+@keyframes authMsgShake {
+  0%   { opacity: 0; transform: translateX(-8px); }
+  25%  { transform: translateX(6px); }
+  50%  { transform: translateX(-4px); }
+  75%  { transform: translateX(2px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+[data-theme="light"] .auth-success {
+  background: rgba(34, 197, 94, 0.08);
+  border-color: rgba(34, 197, 94, 0.25);
+  color: #16a34a;
+}
+
+@keyframes authMsgSlide {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Password Strength Checklist ── */
+.password-rules {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 12px;
+}
+
+.password-rules li {
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 2px 0;
+  transition: color 0.2s;
+}
+
+.password-rules .rule-pass {
+  color: #22c55e;
+}
+
+.password-rules .rule-fail {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+[data-theme="light"] .password-rules .rule-fail {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .password-rules .rule-pass {
+  color: #16a34a;
+}
+
 /* ── Form Inputs ── */
 .auth-input {
   background: rgba(255, 255, 255, 0.04) !important;
